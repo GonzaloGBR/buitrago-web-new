@@ -59,7 +59,7 @@ export default function ProductForm(props: Props) {
             name="id"
             required
             pattern="[a-z0-9-]+"
-            placeholder="comedor-raiz-viva"
+            placeholder="mesa-comedor-1"
             variant="mono"
           />
         </AdminField>
