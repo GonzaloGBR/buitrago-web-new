@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  slug        String    @id
+  name        String
+  tagline     String
+  description String    @db.Text
+  image       String
+  products    Product[]
+}
+
+model Product {
+  id               String   @id
+  categorySlug     String
+  category         Category @relation(fields: [categorySlug], references: [slug], onDelete: Cascade)
+  name             String
+  price            String
+  wood             String
+  woodBadge        String
+  dimensions       String
+  shortDescription String   @db.Text
+  description      String   @db.Text
+  finish           String
+  image            String
+  features         Json
+  gallery          Json
+  featuredAs       FeaturedProduct?
+  sizes            ProductSize[]
+
+  @@index([categorySlug])
+}
+
+/// Variante de medida de un producto (ej: "140x90" → "$2.819.000").
+/// El cliente puede elegir una medida en la página del producto y el precio
+/// mostrado se actualiza al precio asociado. `position` controla el orden de
+/// presentación (0..n).
+model ProductSize {
+  id        Int     @id @default(autoincrement())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  label     String
+  price     String
+  position  Int     @default(0)
+
+  @@index([productId])
+  @@index([productId, position])
+}
+
+/// Las 4 piezas del bloque «Descubre nuestras piezas destacadas» (orden = position 1–4).
+model FeaturedProduct {
+  position  Int     @id
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+/// Consultas enviadas desde el formulario de contacto.
+model Inquiry {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  ipHash    String?
+
+  @@index([createdAt])
+}

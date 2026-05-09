@@ -1,0 +1,20 @@
+# MySQL solo para desarrollo local. Producción: MySQL en Hostinger (sin Docker obligatorio).
+services:
+  mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: buitrago
+      MYSQL_USER: buitrago
+      MYSQL_PASSWORD: buitrago
+    ports:
+      - "3307:3306"
+    volumes:
+      - buitrago_mysql_data:/var/lib/mysql
+    command: >
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  buitrago_mysql_data:

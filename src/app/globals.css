@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════
+   BUITRAGO — Design Tokens & Global Styles
+   Luxury Artisan Furniture | Editorial Aesthetic
+   ═══════════════════════════════════════════════════ */
+
+@theme inline {
+  --color-cream: #F7F5F0;
+  --color-cream-dark: #EDE9E0;
+  --color-sand: #D4C9B8;
+  --color-charcoal: #1A1A1A;
+  --color-charcoal-light: #2D2D2D;
+  --color-warm-gray: #8A8278;
+  --color-warm-gray-light: #B5AFA5;
+  /* Dorado cálido estilo referencia editorial (Sol’ace / SOTD) */
+  --color-gold: #C4A265;
+  --color-gold-dark: #A88B4A;
+  --color-accent: #ecd06f;
+  --color-background: #F7F5F0;
+  --color-foreground: #1A1A1A;
+
+  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-inter);
+  --font-hero: var(--font-cormorant), ui-serif, serif;
+}
+
+/* ─── Base ─── */
+html {
+  scroll-behavior: auto;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  background-color: var(--color-cream);
+  color: var(--color-charcoal);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* iOS: evita scroll horizontal por overscroll en gestos táctiles. */
+  overscroll-behavior-x: none;
+}
+
+/* Touch targets razonables: evita que los botones queden por debajo de 44x44px en táctil. */
+@media (pointer: coarse) {
+  button,
+  a[role="button"],
+  input[type="button"],
+  input[type="submit"] {
+    min-height: 2.75rem;
+  }
+}
+
+/* iOS: Safari hace zoom automático si el input tiene font-size < 16px al enfocarlo.
+   En viewport < 640px subimos el mínimo efectivo a 16px; sobre sm+ cada componente mantiene su tipografía. */
+@media (max-width: 639px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]),
+  textarea,
+  select {
+    font-size: max(16px, 1em);
+  }
+}
+
+/* ─── Lenis ─── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ─── Selection ─── */
+::selection {
+  background-color: var(--color-charcoal);
+  color: var(--color-cream);
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-sand);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-warm-gray);
+}
+
+/* ─── Image Treatment ─── */
+img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+/* ─── Editorial Heading Styles (ritmo tipo showroom / Sol’ace) ─── */
+.heading-display {
+  font-family: var(--font-serif), serif;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 0.94;
+}
+
+.heading-editorial {
+  font-family: var(--font-serif), serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+}
+
+/* Contenedor común secciones — márgenes y ancho máximo alineados */
+.section-editorial {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 1400px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-editorial {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.section-y-loose {
+  padding-top: 4.5rem;
+  padding-bottom: 4.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-y-loose {
+    padding-top: 6.5rem;
+    padding-bottom: 6.5rem;
+  }
+}
+
+.text-body-elegant {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  line-height: 1.7;
+}
+
+.text-label {
+  font-family: var(--font-sans), sans-serif;
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ─── Magnetic Button ─── */
+.btn-editorial {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-charcoal);
+  color: var(--color-charcoal);
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn-editorial::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-charcoal);
+  transform: translateY(101%);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn-editorial:hover {
+  color: var(--color-cream);
+}
+
+.btn-editorial:hover::before {
+  transform: translateY(0%);
+}
+
+.btn-editorial span {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Contact Button Variant ─── */
+.btn-editorial-light {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-cream);
+  color: var(--color-cream);
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  transition: color 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn-editorial-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-cream);
+  transform: translateY(101%);
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.btn-editorial-light:hover {
+  color: var(--color-charcoal);
+}
+
+.btn-editorial-light:hover::before {
+  transform: translateY(0%);
+}
+
+.btn-editorial-light span {
+  position: relative;
+  z-index: 1;
+}
