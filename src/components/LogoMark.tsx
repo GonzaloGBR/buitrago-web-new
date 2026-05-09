@@ -1,7 +1,8 @@
 import type { CSSProperties } from "react";
+import { r2Asset } from "@/lib/r2-public";
 
-/** Logo en máscara CSS: solo se pinta la silueta; evita rectángulo blanco de brightness/invert y el “tablero” si el PNG tiene buen canal alpha. */
-const LOGO_SRC = "/logo-b-mark.png";
+/** Logo en máscara CSS (PNG en R2: `logo.png`). */
+const LOGO_SRC = r2Asset("logo.png");
 
 /** Solo medidas (sin transición), p. ej. al volver al hero sin “fade” del color. */
 export const LOGO_MARK_SIZE_ONLY_CLASS =

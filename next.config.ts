@@ -9,7 +9,14 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: "https", hostname: "buitrago.shop", pathname: "/**" },
       { protocol: "https", hostname: "www.buitrago.shop", pathname: "/**" },
-      ...(process.env.R2_PUBLIC_HOST
+      /** Dominio público R2 del proyecto (sin depender solo de env en build). */
+      {
+        protocol: "https",
+        hostname: "pub-73a172a8457c481781388bbff5c0dfc8.r2.dev",
+        pathname: "/**",
+      },
+      ...(process.env.R2_PUBLIC_HOST &&
+      process.env.R2_PUBLIC_HOST !== "pub-73a172a8457c481781388bbff5c0dfc8.r2.dev"
         ? [
             {
               protocol: "https" as const,

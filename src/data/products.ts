@@ -1,4 +1,17 @@
 import type { Category, Product } from "./catalog";
+import { r2Asset } from "@/lib/r2-public";
+
+/**
+ * Imágenes del seed en Cloudflare R2 (`buitrago-media`).
+ * Si alguna ruta 404, revisá el nombre exacto del archivo en el bucket.
+ */
+const R2 = {
+  hero: r2Asset("fondo-hero.jpg"),
+  mesaComedor: (n: number) => r2Asset(`mesas-de-comedor/${n}-mesa-de-comedor.jpg`),
+  mesaCentro: (n: number) => r2Asset(`mesas-de-centro/${n}-mesa-de-centro.jpg`),
+  gabinete: (n: number) => r2Asset(`gabinetes/${n}-gabinetes.jpg`),
+  silla: (n: number) => r2Asset(`sillas/${n}-sillas.jpg`),
+};
 
 /**
  * Datos iniciales para `npx prisma db seed`. NO se usa en runtime: para leer datos en
@@ -16,42 +29,42 @@ export const categories: Category[] = [
     name: "Mesas de Comedor",
     tagline: "El centro de cada encuentro",
     description: "Mesas pensadas para reunir. Madera maciza, ensambles artesanales y acabados que envejecen con gracia.",
-    image: "/collection-table.png",
+    image: R2.mesaComedor(1),
   },
   {
     slug: "mesas-ratonas",
     name: "Mesas Ratonas",
     tagline: "Equilibrio entre forma y función",
     description: "Piezas bajas que anclan la sala. Líneas limpias, superficies generosas y la calidez de la madera noble.",
-    image: "/detail-joinery.png",
+    image: R2.gabinete(2),
   },
   {
     slug: "camas",
     name: "Camas",
     tagline: "Sueños descansar en elegancia",
     description: "Estructuras sólidas que invitan al descanso. Cabeceras esculpidas y terminaciones suaves al tacto.",
-    image: "/workshop.png",
+    image: R2.mesaCentro(2),
   },
   {
     slug: "puertas",
     name: "Puertas",
     tagline: "Umbrales con carácter",
     description: "Puertas que marcan umbrales con carácter. Madera masiva, herrajes discretos y proporción impecable.",
-    image: "/hero-dining-room-hd.jpg",
+    image: R2.hero,
   },
   {
     slug: "mesas-de-arrime",
     name: "Mesas de Arrime",
     tagline: "Presencia sin peso visual",
     description: "Compañeras de pasillo y recibidor. Esbeltas, funcionales y con la nobleza de lo hecho a mano.",
-    image: "/collection-shelf.png",
+    image: R2.gabinete(1),
   },
   {
     slug: "estantes",
     name: "Estantes",
     tagline: "Orden con personalidad",
     description: "Sistemas modulares y piezas únicas para exhibir y organizar con estilo artesanal.",
-    image: "/collection-chair.png",
+    image: R2.silla(1),
   },
 ];
 
@@ -69,8 +82,8 @@ export const products: SeedProduct[] = [
     description: "Tablón de borde natural con base en hierro negro forjado. Cada pieza conserva las vetas únicas del árbol original, sellada con aceite natural que realza la profundidad de la madera. El diseño combina la calidez orgánica del borde vivo con la solidez del hierro, creando una mesa que es tanto obra funcional como pieza de arte.",
     finish: "Aceite natural con terminación satinada",
     features: ["Borde natural vivo", "Base en hierro negro forjado", "Madera secada al horno", "Soporta hasta 400kg", "Sellado con aceite natural"],
-    image: "/collection-table.png",
-    gallery: ["/collection-table.png", "/detail-joinery.png", "/workshop.png", "/collection-table.png"],
+    image: R2.mesaComedor(1),
+    gallery: [R2.mesaComedor(1), R2.gabinete(2), R2.mesaCentro(2), R2.mesaComedor(1)],
   },
   {
     id: "comedor-paramo",
@@ -84,8 +97,8 @@ export const products: SeedProduct[] = [
     description: "Línea recta y presencia rotunda. Base de madera maciza con ensamble de espiga pasante a la vista. Acabado mate con cera microcristalina que protege sin alterar el tono natural del roble.",
     finish: "Cera microcristalina mate",
     features: ["Ensamble de espiga pasante", "Base de madera maciza", "Madera secada al horno", "Soporta hasta 450kg", "Acabado mate profesional"],
-    image: "/hero-dining-room-hd.jpg",
-    gallery: ["/hero-dining-room-hd.jpg", "/detail-joinery.png", "/workshop.png", "/hero-dining-room-hd.jpg"],
+    image: R2.hero,
+    gallery: [R2.hero, R2.gabinete(2), R2.mesaCentro(2), R2.hero],
   },
   {
     id: "comedor-terruño",
@@ -99,8 +112,8 @@ export const products: SeedProduct[] = [
     description: "Tablero de listones anchos con junta al tope. Patas torneadas a mano con detalle de chaflán inferior. Tonalidad clara y luminosa que aporta frescura a cualquier comedor.",
     finish: "Lustre a muñeca con terminación natural",
     features: ["Patas torneadas a mano", "Junta al tope", "Madera secada al horno", "Soporta hasta 350kg", "Chaflán inferior decorativo"],
-    image: "/collection-table.png",
-    gallery: ["/collection-table.png", "/workshop.png", "/detail-joinery.png", "/collection-table.png"],
+    image: R2.mesaComedor(1),
+    gallery: [R2.mesaComedor(1), R2.mesaCentro(2), R2.gabinete(2), R2.mesaComedor(1)],
   },
   {
     id: "comedor-leñera",
@@ -114,8 +127,8 @@ export const products: SeedProduct[] = [
     description: "Gran tablón de corte tangencial con vetas oscuras pronunciadas. Base en cruz maciza. Acabado al aceite danés que nutre la madera y resalta su carácter natural.",
     finish: "Aceite danés de penetración profunda",
     features: ["Corte tangencial exclusivo", "Base en cruz maciza", "Madera secada al horno", "Soporta hasta 500kg", "Vetas oscuras pronunciadas"],
-    image: "/hero-dining-room-hd.jpg",
-    gallery: ["/hero-dining-room-hd.jpg", "/collection-table.png", "/detail-joinery.png", "/hero-dining-room-hd.jpg"],
+    image: R2.hero,
+    gallery: [R2.hero, R2.mesaComedor(1), R2.gabinete(2), R2.hero],
   },
 
   // ── Mesas Ratonas ──
@@ -131,8 +144,8 @@ export const products: SeedProduct[] = [
     description: "Superficie ovalada con bordes redondeados a mano. Cuatro patas cónicas con insertos de bronce. Acabado al tacto satinado que invita a recorrer la superficie con la mano.",
     finish: "Satinado al tacto",
     features: ["Bordes redondeados a mano", "Insertos de bronce", "Superficie ovalada", "Madera secada al horno", "Patas cónicas torneadas"],
-    image: "/detail-joinery.png",
-    gallery: ["/detail-joinery.png", "/collection-table.png", "/workshop.png", "/detail-joinery.png"],
+    image: R2.gabinete(2),
+    gallery: [R2.gabinete(2), R2.mesaComedor(1), R2.mesaCentro(2), R2.gabinete(2)],
   },
   {
     id: "ratona-piedra",
@@ -146,8 +159,8 @@ export const products: SeedProduct[] = [
     description: "Base monolítica cuadrada con tablero circular. Inspirada en las mesas de piedra rurales, reinterpretada en roble. Peso y presencia que ancla cualquier sala.",
     finish: "Cera natural de abeja",
     features: ["Base monolítica", "Tablero circular", "Diseño inspirado en piedra", "Madera secada al horno", "Cera de abeja natural"],
-    image: "/collection-table.png",
-    gallery: ["/collection-table.png", "/detail-joinery.png", "/workshop.png", "/collection-table.png"],
+    image: R2.mesaComedor(1),
+    gallery: [R2.mesaComedor(1), R2.gabinete(2), R2.mesaCentro(2), R2.mesaComedor(1)],
   },
   {
     id: "ratona-nido",
@@ -161,8 +174,8 @@ export const products: SeedProduct[] = [
     description: "Juego apilable de dos piezas con perfil orgánico. Ideal para espacios que necesitan flexibilidad sin renunciar al diseño. Las dos mesas encajan una dentro de otra.",
     finish: "Lustre natural mate",
     features: ["Set de dos piezas apilables", "Perfil orgánico", "Diseño flexible", "Madera secada al horno", "Encaje perfecto entre piezas"],
-    image: "/detail-joinery.png",
-    gallery: ["/detail-joinery.png", "/workshop.png", "/collection-table.png", "/detail-joinery.png"],
+    image: R2.gabinete(2),
+    gallery: [R2.gabinete(2), R2.mesaCentro(2), R2.mesaComedor(1), R2.gabinete(2)],
   },
   {
     id: "ratona-corte",
@@ -176,8 +189,8 @@ export const products: SeedProduct[] = [
     description: "Línea rectangular con esquinas achaflanadas. Estructura ligera con travesaño central visto. Acabado natural que resalta la veta clara del paraíso.",
     finish: "Acabado natural transparente",
     features: ["Esquinas achaflanadas", "Travesaño central visto", "Estructura ultraligera", "Madera secada al horno", "Veta clara natural"],
-    image: "/collection-table.png",
-    gallery: ["/collection-table.png", "/detail-joinery.png", "/workshop.png", "/collection-table.png"],
+    image: R2.mesaComedor(1),
+    gallery: [R2.mesaComedor(1), R2.gabinete(2), R2.mesaCentro(2), R2.mesaComedor(1)],
   },
 
   // ── Camas ──
@@ -193,8 +206,8 @@ export const products: SeedProduct[] = [
     description: "Cabecera de listones verticales con pequeña repisa integrada. Estructura flotante con zócalo retranqueado que crea la ilusión de suspensión. Firmeza y calidez en cada detalle.",
     finish: "Lustre a muñeca con terminación satinada",
     features: ["Cabecera con repisa integrada", "Estructura flotante", "Ensamble caja y espiga", "Madera secada al horno", "Incluye largueros reforzados"],
-    image: "/workshop.png",
-    gallery: ["/workshop.png", "/detail-joinery.png", "/collection-shelf.png", "/workshop.png"],
+    image: R2.mesaCentro(2),
+    gallery: [R2.mesaCentro(2), R2.gabinete(2), R2.gabinete(1), R2.mesaCentro(2)],
   },
   {
     id: "cama-alba",
@@ -208,8 +221,8 @@ export const products: SeedProduct[] = [
     description: "Cabecera tapizada en lino natural con marco de madera clara. Patas cilíndricas con detalle torneado. Diseño que irradia luz y serenidad, perfecto para ambientes contemporáneos.",
     finish: "Lustre natural con protección UV",
     features: ["Cabecera tapizada en lino", "Marco de madera clara", "Patas torneadas", "Madera secada al horno", "Soporta hasta 400kg"],
-    image: "/workshop.png",
-    gallery: ["/workshop.png", "/collection-chair.png", "/detail-joinery.png", "/workshop.png"],
+    image: R2.mesaCentro(2),
+    gallery: [R2.mesaCentro(2), R2.silla(1), R2.gabinete(2), R2.mesaCentro(2)],
   },
   {
     id: "cama-umbral",
@@ -223,8 +236,8 @@ export const products: SeedProduct[] = [
     description: "Perfil bajo y compacto. Cabecera de panel macizo sin ornamento. Ensamble oculto para una estética minimalista pura que deja protagonismo a la veta del roble.",
     finish: "Aceite natural mate",
     features: ["Ensamble oculto", "Panel macizo sin ornamento", "Perfil bajo", "Madera secada al horno", "Estética minimalista pura"],
-    image: "/detail-joinery.png",
-    gallery: ["/detail-joinery.png", "/workshop.png", "/collection-shelf.png", "/detail-joinery.png"],
+    image: R2.gabinete(2),
+    gallery: [R2.gabinete(2), R2.mesaCentro(2), R2.gabinete(1), R2.gabinete(2)],
   },
   {
     id: "cama-monte",
@@ -238,8 +251,8 @@ export const products: SeedProduct[] = [
     description: "Gran cabecera de tablón continuo con veta oscura protagonista. Baranda lateral integrada que aporta funcionalidad sin sacrificar estética. Una pieza de presencia señorial.",
     finish: "Lustre a muñeca con terminación satinada",
     features: ["Cabecera tallada a mano", "Ensamble caja y espiga", "Madera secada al horno", "Soporta hasta 350kg", "Incluye largueros reforzados"],
-    image: "/workshop.png",
-    gallery: ["/workshop.png", "/hero-dining-room-hd.jpg", "/detail-joinery.png", "/workshop.png"],
+    image: R2.mesaCentro(2),
+    gallery: [R2.mesaCentro(2), R2.hero, R2.gabinete(2), R2.mesaCentro(2)],
   },
 
   // ── Puertas ──
@@ -255,8 +268,8 @@ export const products: SeedProduct[] = [
     description: "Puerta placa maciza de una hoja sin molduras. Canto vivo y bisagras ocultas. Minimalismo y solidez en cada centímetro.",
     finish: "Lustre poliuretánico satinado",
     features: ["Bisagras ocultas", "Canto vivo", "Sin molduras", "Madera secada al horno", "Espesor 4.5cm"],
-    image: "/hero-dining-room-hd.jpg",
-    gallery: ["/hero-dining-room-hd.jpg", "/detail-joinery.png", "/workshop.png", "/hero-dining-room-hd.jpg"],
+    image: R2.hero,
+    gallery: [R2.hero, R2.gabinete(2), R2.mesaCentro(2), R2.hero],
   },
   {
     id: "puerta-granero",
@@ -270,8 +283,8 @@ export const products: SeedProduct[] = [
     description: "Corrediza tipo granero con riel de hierro a la vista. Tablones horizontales con ensamble de lengüeta. Rústica y elegante a partes iguales.",
     finish: "Acabado envejecido natural",
     features: ["Riel de hierro incluido", "Tablones horizontales", "Ensamble de lengüeta", "Madera secada al horno", "Sistema corredizo silencioso"],
-    image: "/hero-dining-room-hd.jpg",
-    gallery: ["/hero-dining-room-hd.jpg", "/workshop.png", "/detail-joinery.png", "/hero-dining-room-hd.jpg"],
+    image: R2.hero,
+    gallery: [R2.hero, R2.mesaCentro(2), R2.gabinete(2), R2.hero],
   },
   {
     id: "puerta-celosia",
@@ -285,8 +298,8 @@ export const products: SeedProduct[] = [
     description: "Panel superior de celosía inclinada que filtra luz sin perder privacidad. Panel inferior macizo. Acabado blanqueado que aporta luminosidad.",
     finish: "Acabado blanqueado con protección",
     features: ["Celosía para filtrado de luz", "Panel inferior macizo", "Acabado blanqueado", "Madera secada al horno", "Herrajes de acero inoxidable"],
-    image: "/collection-shelf.png",
-    gallery: ["/collection-shelf.png", "/hero-dining-room-hd.jpg", "/detail-joinery.png", "/collection-shelf.png"],
+    image: R2.gabinete(1),
+    gallery: [R2.gabinete(1), R2.hero, R2.gabinete(2), R2.gabinete(1)],
   },
   {
     id: "puerta-doble-hoja",
@@ -300,8 +313,8 @@ export const products: SeedProduct[] = [
     description: "Par de hojas simétricas con tirador embutido en la madera. Ideales como separador de ambientes. Imponentes y sutiles al mismo tiempo.",
     finish: "Lustre a muñeca con terminación brillante",
     features: ["Tirador embutido en madera", "Dos hojas simétricas", "Separador de ambientes", "Madera secada al horno", "Incluye marco completo"],
-    image: "/hero-dining-room-hd.jpg",
-    gallery: ["/hero-dining-room-hd.jpg", "/workshop.png", "/collection-shelf.png", "/hero-dining-room-hd.jpg"],
+    image: R2.hero,
+    gallery: [R2.hero, R2.mesaCentro(2), R2.gabinete(1), R2.hero],
   },
 
   // ── Mesas de Arrime ──
@@ -317,8 +330,8 @@ export const products: SeedProduct[] = [
     description: "Perfil ultra estrecho con un solo cajón discreto. Patas rectas con pie de latón. Para pasillos que merecen más que un mueble común.",
     finish: "Satinado natural",
     features: ["Cajón discreto", "Pie de latón", "Perfil ultra estrecho", "Madera secada al horno", "Patas rectas macizas"],
-    image: "/collection-shelf.png",
-    gallery: ["/collection-shelf.png", "/detail-joinery.png", "/workshop.png", "/collection-shelf.png"],
+    image: R2.gabinete(1),
+    gallery: [R2.gabinete(1), R2.gabinete(2), R2.mesaCentro(2), R2.gabinete(1)],
   },
   {
     id: "arrime-eco",
@@ -332,8 +345,8 @@ export const products: SeedProduct[] = [
     description: "Estructura abierta con estante inferior de listones. Tono rubio natural. Funcionalidad sin peso visual para espacios que respiran.",
     finish: "Lustre natural mate",
     features: ["Estante inferior", "Estructura abierta", "Tono rubio natural", "Madera secada al horno", "Peso visual mínimo"],
-    image: "/collection-shelf.png",
-    gallery: ["/collection-shelf.png", "/collection-table.png", "/detail-joinery.png", "/collection-shelf.png"],
+    image: R2.gabinete(1),
+    gallery: [R2.gabinete(1), R2.mesaComedor(1), R2.gabinete(2), R2.gabinete(1)],
   },
   {
     id: "arrime-curva",
@@ -347,8 +360,8 @@ export const products: SeedProduct[] = [
     description: "Tablero con borde delantero curvado y patas con leve inclinación. Referencia mid-century con alma artesanal que combina lo mejor de dos mundos.",
     finish: "Cera microcristalina",
     features: ["Borde curvado a mano", "Patas inclinadas", "Estilo mid-century", "Madera secada al horno", "Cera microcristalina natural"],
-    image: "/detail-joinery.png",
-    gallery: ["/detail-joinery.png", "/collection-shelf.png", "/workshop.png", "/detail-joinery.png"],
+    image: R2.gabinete(2),
+    gallery: [R2.gabinete(2), R2.gabinete(1), R2.mesaCentro(2), R2.gabinete(2)],
   },
   {
     id: "arrime-bloque",
@@ -362,8 +375,8 @@ export const products: SeedProduct[] = [
     description: "Diseño cúbico con costados cerrados y hueco central. Apariencia de monolito liviano. Acabado cepillado que resalta la textura natural.",
     finish: "Cepillado texturizado",
     features: ["Costados cerrados", "Hueco central funcional", "Aspecto monolítico", "Madera secada al horno", "Acabado cepillado"],
-    image: "/collection-shelf.png",
-    gallery: ["/collection-shelf.png", "/workshop.png", "/detail-joinery.png", "/collection-shelf.png"],
+    image: R2.gabinete(1),
+    gallery: [R2.gabinete(1), R2.mesaCentro(2), R2.gabinete(2), R2.gabinete(1)],
   },
 
   // ── Estantes ──
@@ -379,8 +392,8 @@ export const products: SeedProduct[] = [
     description: "Cinco estantes abiertos sobre estructura de hierro negro. Cada balda es un tablón macizo con canto natural. Fusión perfecta entre lo industrial y lo artesanal.",
     finish: "Aceite natural con hierro encerado",
     features: ["Estructura de hierro negro", "Cinco baldas macizas", "Canto natural", "Madera secada al horno", "Fijación a pared incluida"],
-    image: "/collection-shelf.png",
-    gallery: ["/collection-shelf.png", "/detail-joinery.png", "/workshop.png", "/collection-shelf.png"],
+    image: R2.gabinete(1),
+    gallery: [R2.gabinete(1), R2.gabinete(2), R2.mesaCentro(2), R2.gabinete(1)],
   },
   {
     id: "estante-cubo",
@@ -394,8 +407,8 @@ export const products: SeedProduct[] = [
     description: "Módulos cuadrados apilados en composición asimétrica. Fijación a pared invisible. Orden con personalidad para quienes buscan algo diferente.",
     finish: "Lustre natural transparente",
     features: ["Composición asimétrica", "Fijación invisible", "Módulos independientes", "Madera secada al horno", "Personalizable en disposición"],
-    image: "/collection-chair.png",
-    gallery: ["/collection-chair.png", "/collection-shelf.png", "/detail-joinery.png", "/collection-chair.png"],
+    image: R2.silla(1),
+    gallery: [R2.silla(1), R2.gabinete(1), R2.gabinete(2), R2.silla(1)],
   },
   {
     id: "estante-suspendido",
@@ -409,8 +422,8 @@ export const products: SeedProduct[] = [
     description: "Juego de tres tablas flotantes con fijación oculta. Diferentes largos para ritmo visual. Minimalismo llevado a su máxima expresión.",
     finish: "Cera natural de abeja",
     features: ["Fijación oculta", "Tres tablas de distinto largo", "Efecto flotante", "Madera secada al horno", "Soporta hasta 25kg cada tabla"],
-    image: "/collection-shelf.png",
-    gallery: ["/collection-shelf.png", "/workshop.png", "/collection-table.png", "/collection-shelf.png"],
+    image: R2.gabinete(1),
+    gallery: [R2.gabinete(1), R2.mesaCentro(2), R2.mesaComedor(1), R2.gabinete(1)],
   },
   {
     id: "estante-vitrina",
@@ -424,7 +437,7 @@ export const products: SeedProduct[] = [
     description: "Cuerpo cerrado con puertas de vidrio templado y marco de madera oscura. Iluminación interior opcional. Para exhibir lo que realmente importa.",
     finish: "Lustre a muñeca brillante",
     features: ["Puertas de vidrio templado", "Marco de madera oscura", "Iluminación interior", "Madera secada al horno", "Bisagras de cierre suave"],
-    image: "/collection-chair.png",
-    gallery: ["/collection-chair.png", "/collection-shelf.png", "/workshop.png", "/collection-chair.png"],
+    image: R2.silla(1),
+    gallery: [R2.silla(1), R2.gabinete(1), R2.mesaCentro(2), R2.silla(1)],
   },
 ];

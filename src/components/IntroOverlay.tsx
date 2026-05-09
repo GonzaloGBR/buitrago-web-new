@@ -9,6 +9,7 @@ import {
   isMobileViewport,
   prefersReducedMotion,
 } from "@/lib/device-capabilities";
+import { r2Asset } from "@/lib/r2-public";
 
 type IntroOverlayProps = {
   onComplete: () => void;
@@ -31,8 +32,8 @@ type IntroOverlayProps = {
  */
 const PRELOAD_IMAGES: string[] = Array.from(
   new Set<string>([
-    "/hero-dining-room-hd.png",
-    "/logo-b-mark.png",
+    r2Asset("fondo-hero.jpg"),
+    r2Asset("logo.png"),
     ...MOODBOARD_ITEMS.slice(0, 2).map((m) => m.src),
   ])
 );
@@ -183,7 +184,7 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
         <LogoMark
           variant="on-light"
           className="h-[4rem] w-[min(16rem,65vw)] sm:h-[5rem] sm:w-[20rem] md:h-[5.5rem] md:w-[24rem]"
-          src="/logo-b-mark.png"
+          src={r2Asset("logo.png")}
         />
       </span>
 

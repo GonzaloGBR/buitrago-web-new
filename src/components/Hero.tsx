@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { r2Asset } from "@/lib/r2-public";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -220,7 +221,7 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
               className="relative h-full w-full origin-center scale-[1.12] will-change-transform"
             >
               <Image
-                src="/hero-dining-room-hd.png"
+                src={r2Asset("fondo-hero.jpg")}
                 alt="Ambiente con madera noble y diseño de interiores"
                 fill
                 priority

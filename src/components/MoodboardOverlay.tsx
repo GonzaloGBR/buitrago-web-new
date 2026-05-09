@@ -8,6 +8,7 @@ import {
   isMobileViewport,
   prefersReducedMotion,
 } from "@/lib/device-capabilities";
+import { r2Asset } from "@/lib/r2-public";
 
 interface MoodboardItem {
   src: string;
@@ -45,32 +46,38 @@ const SLIDE_UP_DURATION_MOBILE = 0.75;
  */
 export const MOODBOARD_ITEMS: MoodboardItem[] = [
   {
-    src: "/collection-shelf.png", alt: "Estante artesanal",
+    src: r2Asset("gabinetes/1-gabinetes.jpg"),
+    alt: "Gabinete artesanal",
     finalX: "8%", finalY: "12%", width: "clamp(140px, 20vw, 280px)", height: "clamp(180px, 26vw, 360px)",
     rotation: -3, zIndex: 1,
   },
   {
-    src: "/collection-chair.png", alt: "Silla de diseño",
+    src: r2Asset("sillas/1-sillas.jpg"),
+    alt: "Silla de diseño",
     finalX: "28%", finalY: "16%", width: "clamp(160px, 24vw, 340px)", height: "clamp(200px, 28vw, 400px)",
     rotation: -1, zIndex: 2,
   },
   {
-    src: "/detail-joinery.png", alt: "Detalle de carpintería",
+    src: r2Asset("gabinetes/2-gabinetes.jpg"),
+    alt: "Detalle de carpintería",
     finalX: "52%", finalY: "6%", width: "clamp(140px, 19vw, 270px)", height: "clamp(120px, 16vw, 220px)",
     rotation: 2.5, zIndex: 3,
   },
   {
-    src: "/workshop.png", alt: "Taller artesanal",
+    src: r2Asset("mesas-de-centro/3-mesa-de-centro.jpg"),
+    alt: "Mesa ratona",
     finalX: "54%", finalY: "24%", width: "clamp(150px, 22vw, 310px)", height: "clamp(180px, 24vw, 340px)",
     rotation: 3, zIndex: 4,
   },
   {
-    src: "/collection-table.png", alt: "Mesa de madera",
+    src: r2Asset("mesas-de-comedor/1-mesa-de-comedor.jpg"),
+    alt: "Mesa de comedor",
     finalX: "22%", finalY: "44%", width: "clamp(160px, 24vw, 340px)", height: "clamp(140px, 18vw, 260px)",
     rotation: -2, zIndex: 5,
   },
   {
-    src: "/hero-dining-room-hd.png", alt: "Interior con muebles Buitrago",
+    src: r2Asset("fondo-hero.jpg"),
+    alt: "Interior con muebles Buitrago",
     finalX: "42%", finalY: "40%", width: "clamp(170px, 24vw, 340px)", height: "clamp(140px, 18vw, 260px)",
     rotation: 1.5, zIndex: 6,
   },

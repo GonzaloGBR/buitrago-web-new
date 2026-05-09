@@ -30,7 +30,13 @@ export function normalizeGallery(urls: unknown): string[] {
 export function shouldUnoptimizeImage(src: string): boolean {
   const s = String(src);
   if (s.startsWith("/uploads/") || s.includes("/uploads/")) return true;
-  const base = process.env.R2_PUBLIC_URL?.replace(/\/$/, "");
-  if (base && s.startsWith(base)) return true;
+  const bases = [
+    process.env.R2_PUBLIC_URL,
+    process.env.NEXT_PUBLIC_R2_PUBLIC_URL,
+    "https://pub-73a172a8457c481781388bbff5c0dfc8.r2.dev",
+  ]
+    .filter(Boolean)
+    .map((b) => String(b).replace(/\/$/, ""));
+  if (bases.some((b) => s.startsWith(b))) return true;
   return false;
 }
