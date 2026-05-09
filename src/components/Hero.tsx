@@ -40,7 +40,7 @@ export default function Hero({ animateIn, onHeroReady, heroImageSrc }: HeroProps
     const scrollTriggers: ScrollTrigger[] = [];
     let moveHandler: ((e: PointerEvent) => void) | null = null;
     let leaveHandler: (() => void) | null = null;
-    let parallaxTicker: (() => void) | null = null;
+    let parallaxTicker: gsap.TickerCallback | null = null;
 
     let attempts = 0;
     const MAX_REF_ATTEMPTS = 120;
@@ -181,9 +181,9 @@ export default function Hero({ animateIn, onHeroReady, heroImageSrc }: HeroProps
           tgtY = 0;
         };
 
-        parallaxTicker = (_t: number, deltaMs?: number) => {
+        parallaxTicker = (_time, deltaTime) => {
           if (!mouseLayer || cancelled) return;
-          const dtSec = Math.min((deltaMs ?? 1000 / 60) / 1000, 0.05);
+          const dtSec = Math.min(deltaTime, 0.05);
           const k = 1 - Math.exp(-MOUSE_PARALLAX_LAMBDA * dtSec);
           curX += (tgtX - curX) * k;
           curY += (tgtY - curY) * k;
