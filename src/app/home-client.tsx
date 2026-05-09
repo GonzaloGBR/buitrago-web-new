@@ -18,13 +18,15 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import type { Category, FeaturedHomeItem } from "@/data/catalog";
+import type { SiteContentValues } from "@/lib/site-content-defaults";
 
 type Props = {
   categories: Category[];
   featured: FeaturedHomeItem[];
+  siteContent: SiteContentValues;
 };
 
-export default function HomeClient({ categories, featured }: Props) {
+export default function HomeClient({ categories, featured, siteContent }: Props) {
   /**
    * SSR y el PRIMER render del cliente deben producir el mismo HTML — de lo contrario React
    * lanza un "hydration mismatch". Por eso los flags arrancan en `true` (= sitio completo,
@@ -154,11 +156,17 @@ export default function HomeClient({ categories, featured }: Props) {
 
   return (
     <>
-      {!preloaderDone && <IntroOverlay onComplete={handleIntroEnd} />}
+      {!preloaderDone && (
+        <IntroOverlay
+          onComplete={handleIntroEnd}
+          heroImageSrc={siteContent.homeHeroImage}
+        />
+      )}
 
       {!moodboardDone && (
         <MoodboardOverlay
           startAnimation={preloaderDone}
+          heroImageSrc={siteContent.homeHeroImage}
           onRevealStart={handleMoodboardRevealStart}
           onComplete={handleMoodboardEnd}
         />
@@ -167,12 +175,16 @@ export default function HomeClient({ categories, featured }: Props) {
       <Navbar siteChromeVisible={siteChromeVisible} />
 
       <main>
-        <Hero animateIn={heroRevealStarted} onHeroReady={handleHeroReady} />
+        <Hero
+          animateIn={heroRevealStarted}
+          onHeroReady={handleHeroReady}
+          heroImageSrc={siteContent.homeHeroImage}
+        />
 
         {siteChromeVisible && (
           <>
             <MarqueeSection />
-            <PhilosophySection />
+            <PhilosophySection imageSrc={siteContent.philosophyImage} />
             <FeaturedProducts items={featured} />
             <CategoriesSection categories={categories} />
             <TestimonialsSection />

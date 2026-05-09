@@ -42,6 +42,15 @@ export default function AdminHomePage() {
             Las cuatro fichas del inicio enlazan a cada ficha de producto.
           </p>
         </Link>
+        <Link
+          href="/admin/site-images"
+          className="rounded-sm border border-charcoal/10 bg-white p-6 shadow-sm transition hover:border-charcoal/25"
+        >
+          <h2 className="font-serif text-xl text-charcoal">Imágenes del sitio</h2>
+          <p className="mt-2 font-sans text-sm text-warm-gray">
+            Hero, «Nuestra filosofía» y la página «Conocer más».
+          </p>
+        </Link>
       </div>
     </div>
   );

@@ -375,7 +375,7 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
           <Link
             href="/"
             aria-label="Buitrago — inicio"
-            className="z-10 flex h-[3.5rem] shrink-0 items-center justify-center sm:h-[4.5rem] md:h-[5rem]"
+            className="z-10 flex h-[4.25rem] shrink-0 items-center justify-center sm:h-[5.35rem] md:h-[5.85rem]"
           >
             <LogoMark
               variant={logoOnDark ? "on-dark" : "on-light"}
@@ -391,13 +391,13 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
           <button
             type="button"
             onClick={toggleMenu}
-            className="group z-10 flex shrink-0 cursor-pointer items-center gap-2 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] sm:gap-3.5"
+            className="group z-10 flex shrink-0 cursor-pointer items-center gap-2.5 transition-transform duration-300 ease-out hover:scale-[1.02] active:scale-[0.98] sm:gap-3.5"
             aria-expanded={menuOpen}
             aria-controls="site-nav-overlay"
             aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
           >
             <span
-              className={`relative flex size-11 shrink-0 items-center justify-center rounded-full border ${
+              className={`relative flex size-[2.85rem] shrink-0 items-center justify-center rounded-full border sm:size-[3.15rem] ${
                 navChromeInstant
                   ? "transition-none"
                   : "transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
@@ -407,28 +407,28 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
                     ? "border-charcoal/20 bg-charcoal/[0.06] shadow-sm"
                     : "border-cream/40 bg-cream/[0.07] shadow-[0_0_0_1px_rgba(255,255,255,0.06)_inset]"
                   : onDark
-                    ? "border-cream/22 bg-cream/[0.04] group-hover:border-cream/35"
+                    ? "border-cream/45 bg-transparent shadow-none group-hover:border-cream/60 group-hover:bg-cream/[0.06]"
                     : "border-charcoal/12 bg-charcoal/[0.02] group-hover:border-charcoal/22"
               }`}
             >
-              <span className="flex h-[13px] w-[17px] flex-col justify-between" aria-hidden>
+              <span className="flex h-[15px] w-[19px] flex-col justify-between sm:h-4 sm:w-[21px]" aria-hidden>
                 <span
-                  className={`block h-[1.5px] w-full origin-center rounded-full ${
+                  className={`block h-[2px] w-full origin-center rounded-full ${
                     navChromeInstant
                       ? "transition-none"
                       : "transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                   } ${
                     menuOpen
                       ? menuBarOverLight
-                        ? "translate-y-[5.75px] rotate-45 bg-charcoal"
-                        : "translate-y-[5.75px] rotate-45 bg-cream"
+                        ? "translate-y-[6.5px] rotate-45 bg-charcoal"
+                        : "translate-y-[6.5px] rotate-45 bg-cream"
                       : onDark
                         ? "bg-cream"
                         : "bg-charcoal"
                   }`}
                 />
                 <span
-                  className={`block h-[1.5px] w-full rounded-full ${
+                  className={`block h-[2px] w-full rounded-full ${
                     navChromeInstant ? "transition-none" : "transition-all duration-400 ease-out"
                   } ${
                     menuOpen
@@ -441,15 +441,15 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
                   }`}
                 />
                 <span
-                  className={`block h-[1.5px] w-full origin-center rounded-full ${
+                  className={`block h-[2px] w-full origin-center rounded-full ${
                     navChromeInstant
                       ? "transition-none"
                       : "transition-all duration-500 ease-[cubic-bezier(0.19,1,0.22,1)]"
                   } ${
                     menuOpen
                       ? menuBarOverLight
-                        ? "-translate-y-[5.75px] -rotate-45 bg-charcoal"
-                        : "-translate-y-[5.75px] -rotate-45 bg-cream"
+                        ? "-translate-y-[6.5px] -rotate-45 bg-charcoal"
+                        : "-translate-y-[6.5px] -rotate-45 bg-cream"
                       : onDark
                         ? "bg-cream"
                         : "bg-charcoal"
@@ -458,7 +458,7 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
               </span>
             </span>
             <span
-              className={`hidden text-label tracking-[0.28em] sm:inline ${
+              className={`hidden font-sans text-[0.7rem] font-normal tracking-[0.28em] sm:inline ${
                 navChromeInstant ? "transition-none" : "transition-colors duration-500"
               } ${
                 menuOpen

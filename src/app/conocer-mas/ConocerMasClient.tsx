@@ -5,8 +5,18 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { shouldUnoptimizeImage } from "@/lib/image-url";
+import type { SiteContentValues } from "@/lib/site-content-defaults";
 
 gsap.registerPlugin(ScrollTrigger);
+
+export type ConocerMasImages = Pick<
+  SiteContentValues,
+  | "conocerMasHeroImage"
+  | "conocerMasStoryImage"
+  | "conocerMasProcesoImage"
+  | "conocerMasCtaImage"
+>;
 
 const VALORES = [
   {
@@ -56,7 +66,7 @@ const MADERAS = [
   { nombre: "Fresno", tono: "Claro veteado", uso: "Detalles y contrastes" },
 ];
 
-export default function ConocerMasClient() {
+export default function ConocerMasClient({ images }: { images: ConocerMasImages }) {
   const heroRef = useRef<HTMLElement>(null);
   const heroImgRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
@@ -205,10 +215,11 @@ export default function ConocerMasClient() {
           className="absolute inset-0 will-change-transform"
         >
           <Image
-            src="/workshop.png"
+            src={images.conocerMasHeroImage}
             alt="Taller Buitrago: manos y herramientas sobre madera"
             fill
             priority
+            unoptimized={shouldUnoptimizeImage(images.conocerMasHeroImage)}
             className="object-cover object-center"
             sizes="100vw"
           />
@@ -251,9 +262,10 @@ export default function ConocerMasClient() {
           <div className="story-reveal order-2 opacity-0 md:order-1">
             <div className="relative aspect-[4/5] overflow-hidden bg-cream-dark">
               <Image
-                src="/detail-joinery.png"
+                src={images.conocerMasStoryImage}
                 alt="Detalle de ensamblaje — unión a cola de milano"
                 fill
+                unoptimized={shouldUnoptimizeImage(images.conocerMasStoryImage)}
                 className="object-cover transition-transform duration-[2.2s] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.03]"
                 sizes="(max-width: 768px) 100vw, 45vw"
               />
@@ -358,9 +370,10 @@ export default function ConocerMasClient() {
 
             <div className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden bg-cream-dark sm:mt-12">
               <Image
-                src="/workshop.png"
+                src={images.conocerMasProcesoImage}
                 alt="Taller Buitrago en actividad"
                 fill
+                unoptimized={shouldUnoptimizeImage(images.conocerMasProcesoImage)}
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 40vw"
               />
@@ -523,10 +536,11 @@ export default function ConocerMasClient() {
       <section className="relative overflow-hidden bg-charcoal text-cream">
         <div className="pointer-events-none absolute inset-0 opacity-20">
           <Image
-            src="/detail-joinery.png"
+            src={images.conocerMasCtaImage}
             alt=""
             fill
             aria-hidden
+            unoptimized={shouldUnoptimizeImage(images.conocerMasCtaImage)}
             className="object-cover"
             sizes="100vw"
           />

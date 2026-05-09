@@ -72,3 +72,16 @@ model Inquiry {
 
   @@index([createdAt])
 }
+
+/// Imágenes editables del sitio (inicio y página «Conocer más»). Una sola fila (id = 1).
+/// Cadena vacía en un campo = usar valor por defecto en código (`SITE_CONTENT_DEFAULTS`).
+model SiteContent {
+  id                     Int      @id @default(1)
+  homeHeroImage          String   @default("") @db.VarChar(2048)
+  philosophyImage        String   @default("") @db.VarChar(2048)
+  conocerMasHeroImage    String   @default("") @db.VarChar(2048)
+  conocerMasStoryImage   String   @default("") @db.VarChar(2048)
+  conocerMasProcesoImage String   @default("") @db.VarChar(2048)
+  conocerMasCtaImage     String   @default("") @db.VarChar(2048)
+  updatedAt              DateTime @updatedAt
+}

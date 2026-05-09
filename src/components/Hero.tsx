@@ -4,16 +4,23 @@ import { useLayoutEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { r2Asset } from "@/lib/r2-public";
+import { shouldUnoptimizeImage } from "@/lib/image-url";
+import { prefersReducedMotion } from "@/lib/device-capabilities";
 
 gsap.registerPlugin(ScrollTrigger);
+
+/** Suavizado del parallax (por segundo, ~8–14 = fluido sin quedar “pegajoso”). */
+const MOUSE_PARALLAX_LAMBDA = 11;
+/** Desplazamiento máximo en px a los bordes del hero (capa 118% evita bordes vacíos). */
+const MOUSE_PARALLAX_MAX_PX = 52;
 
 type HeroProps = {
   animateIn: boolean;
   onHeroReady: () => void;
+  heroImageSrc: string;
 };
 
-export default function Hero({ animateIn, onHeroReady }: HeroProps) {
+export default function Hero({ animateIn, onHeroReady, heroImageSrc }: HeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
   const heroScaleRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -33,7 +40,7 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
     const scrollTriggers: ScrollTrigger[] = [];
     let moveHandler: ((e: PointerEvent) => void) | null = null;
     let leaveHandler: (() => void) | null = null;
-    let sectionForCleanup: HTMLElement | null = null;
+    let parallaxTicker: (() => void) | null = null;
 
     let attempts = 0;
     const MAX_REF_ATTEMPTS = 120;
@@ -61,7 +68,6 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
       }
 
       didAnimate.current = true;
-      sectionForCleanup = section;
 
     gsap.set(heroScale, {
       scale: 1.12,
@@ -146,14 +152,13 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
         scrollTriggers.push(stTitle);
       }
 
-      const fine = window.matchMedia("(pointer: fine)").matches;
+      const fine =
+        window.matchMedia("(pointer: fine)").matches && !prefersReducedMotion();
       if (fine && mouseLayer) {
-        /* Misma suavidad en X e Y; un poco más rápido para que el vertical no “se arrastre”. */
-        const quickOpts = { duration: 0.55, ease: "power3.out" as const };
-        const xTo = gsap.quickTo(mouseLayer, "x", quickOpts);
-        const yTo = gsap.quickTo(mouseLayer, "y", quickOpts);
-
-        const maxPan = 44;
+        let tgtX = 0;
+        let tgtY = 0;
+        let curX = 0;
+        let curY = 0;
 
         moveHandler = (e: PointerEvent) => {
           const r = section.getBoundingClientRect();
@@ -161,19 +166,42 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
           const cy = r.top + r.height / 2;
           const halfW = r.width / 2 || 1;
           const halfH = r.height / 2 || 1;
-          /* Normalizado -1…1 desde el centro del hero */
+          /* -1…1 desde el centro: arriba/izquierda → negativo */
           const nx = gsap.utils.clamp(-1, 1, (e.clientX - cx) / halfW);
           const ny = gsap.utils.clamp(-1, 1, (e.clientY - cy) / halfH);
-          /* Signo opuesto al desplazamiento en px: así la foto “sigue” al cursor (derecha → imagen a la derecha). */
-          xTo(-nx * maxPan);
-          yTo(-ny * maxPan);
+          /*
+           * Ratón izquierda → la capa (más ancha que el viewport) se desplaza a la izquierda:
+           * se “lleva” la imagen en la misma dirección que el cursor. Igual en Y.
+           */
+          tgtX = -nx * MOUSE_PARALLAX_MAX_PX;
+          tgtY = -ny * MOUSE_PARALLAX_MAX_PX;
         };
         leaveHandler = () => {
-          xTo(0);
-          yTo(0);
+          tgtX = 0;
+          tgtY = 0;
         };
-        section.addEventListener("pointermove", moveHandler);
-        section.addEventListener("pointerleave", leaveHandler);
+
+        parallaxTicker = (_t: number, deltaMs?: number) => {
+          if (!mouseLayer || cancelled) return;
+          const dtSec = Math.min((deltaMs ?? 1000 / 60) / 1000, 0.05);
+          const k = 1 - Math.exp(-MOUSE_PARALLAX_LAMBDA * dtSec);
+          curX += (tgtX - curX) * k;
+          curY += (tgtY - curY) * k;
+          gsap.set(mouseLayer, {
+            x: Math.round(curX * 100) / 100,
+            y: Math.round(curY * 100) / 100,
+          });
+        };
+        gsap.ticker.add(parallaxTicker);
+
+        /*
+         * El listener debe ir en `window`: título, CTA, logo y menú están por encima del hero
+         * (z-index) y capturan el puntero; si escucháramos solo en la section, el parallax
+         * se “congelaba” al pasar por esos elementos.
+         */
+        window.addEventListener("pointermove", moveHandler, { passive: true });
+        document.documentElement.addEventListener("mouseleave", leaveHandler);
+        window.addEventListener("blur", leaveHandler);
       }
 
       ScrollTrigger.refresh();
@@ -188,9 +216,16 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
       if (master) {
         master.kill();
         scrollTriggers.forEach((t) => t.kill());
-        if (sectionForCleanup && moveHandler) {
-          sectionForCleanup.removeEventListener("pointermove", moveHandler);
-          sectionForCleanup.removeEventListener("pointerleave", leaveHandler!);
+        if (moveHandler) {
+          window.removeEventListener("pointermove", moveHandler);
+          document.documentElement.removeEventListener(
+            "mouseleave",
+            leaveHandler!
+          );
+          window.removeEventListener("blur", leaveHandler!);
+        }
+        if (parallaxTicker) {
+          gsap.ticker.remove(parallaxTicker);
         }
       }
       didAnimate.current = false;
@@ -221,13 +256,14 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
               className="relative h-full w-full origin-center scale-[1.12] will-change-transform"
             >
               <Image
-                src={r2Asset("fondo-hero.jpg")}
+                src={heroImageSrc}
                 alt="Ambiente con madera noble y diseño de interiores"
                 fill
                 priority
                 quality={90}
                 sizes="100vw"
-                className="object-cover object-center md:object-[50%_42%]"
+                unoptimized={shouldUnoptimizeImage(heroImageSrc)}
+                className="object-cover object-center brightness-[0.94] md:object-[50%_42%]"
               />
             </div>
           </div>
@@ -235,7 +271,7 @@ export default function Hero({ animateIn, onHeroReady }: HeroProps) {
 
         <div
           ref={overlayRef}
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(22,20,18,0.42)_0%,rgba(22,20,18,0.1)_28%,rgba(22,20,18,0.03)_45%,transparent_58%)]"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(22,20,18,0.52)_0%,rgba(22,20,18,0.14)_28%,rgba(22,20,18,0.055)_45%,transparent_58%)]"
           style={{ opacity: 0 }}
         />
       </div>

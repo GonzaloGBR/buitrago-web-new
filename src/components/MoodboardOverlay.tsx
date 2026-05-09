@@ -9,8 +9,9 @@ import {
   prefersReducedMotion,
 } from "@/lib/device-capabilities";
 import { r2Asset } from "@/lib/r2-public";
+import { shouldUnoptimizeImage } from "@/lib/image-url";
 
-interface MoodboardItem {
+export interface MoodboardItem {
   src: string;
   alt: string;
   finalX: string;
@@ -83,8 +84,21 @@ export const MOODBOARD_ITEMS: MoodboardItem[] = [
   },
 ];
 
+const HERO_CARD_INDEX = MOODBOARD_ITEMS.length - 1;
+
+/** Última tarjeta del collage usa la misma foto que el hero (configurable desde el admin). */
+export function getMoodboardItems(heroImageSrc: string): MoodboardItem[] {
+  const items = MOODBOARD_ITEMS.map((item) => ({ ...item }));
+  items[HERO_CARD_INDEX] = {
+    ...items[HERO_CARD_INDEX],
+    src: heroImageSrc,
+  };
+  return items;
+}
+
 type Props = {
   startAnimation: boolean;
+  heroImageSrc: string;
   /** Se llama en el primer frame del deslizamiento hacia arriba (el hero ya se ve debajo). */
   onRevealStart?: () => void;
   onComplete: () => void;
@@ -92,6 +106,7 @@ type Props = {
 
 export default function MoodboardOverlay({
   startAnimation,
+  heroImageSrc,
   onRevealStart,
   onComplete,
 }: Props) {
@@ -131,6 +146,7 @@ export default function MoodboardOverlay({
     const slideDuration = mobile ? SLIDE_UP_DURATION_MOBILE : SLIDE_UP_DURATION_DESKTOP;
 
     const cards = cardsRef.current.filter(Boolean) as HTMLDivElement[];
+    const items = getMoodboardItems(heroImageSrc);
 
     cards.forEach((card) => {
       gsap.set(card, {
@@ -150,7 +166,7 @@ export default function MoodboardOverlay({
     }
 
     cards.forEach((card, i) => {
-      const item = MOODBOARD_ITEMS[i];
+      const item = items[i];
       const start = i * stagger;
 
       tl.to(card, {
@@ -179,7 +195,9 @@ export default function MoodboardOverlay({
     }, "+=0");
 
     return () => { tl.kill(); };
-  }, [startAnimation, onComplete, onRevealStart]);
+  }, [startAnimation, onComplete, onRevealStart, heroImageSrc]);
+
+  const items = getMoodboardItems(heroImageSrc);
 
   return (
     <div
@@ -191,9 +209,9 @@ export default function MoodboardOverlay({
         ref={innerRef}
         className="relative mx-auto flex h-full w-full max-w-[900px] items-center justify-center"
       >
-        {MOODBOARD_ITEMS.map((item, i) => (
+        {items.map((item, i) => (
           <div
-            key={item.src}
+            key={`${i}-${item.src}`}
             ref={(el) => { cardsRef.current[i] = el; }}
             className="absolute overflow-hidden rounded-md shadow-lg"
             style={{
@@ -205,6 +223,7 @@ export default function MoodboardOverlay({
             <Image
               src={item.src} alt={item.alt} fill
               className="object-cover"
+              unoptimized={shouldUnoptimizeImage(item.src)}
               /* En móvil las tarjetas ocupan como mucho ~24vw por los clamps de `width`. Un
                  `sizes` ajustado hace que next/image entregue versiones más pequeñas (menos
                  bytes, decodificación más rápida), que es exactamente lo que esta animación

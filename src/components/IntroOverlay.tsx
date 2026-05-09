@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import LogoMark from "@/components/LogoMark";
-import { MOODBOARD_ITEMS } from "@/components/MoodboardOverlay";
+import { getMoodboardItems } from "@/components/MoodboardOverlay";
 import {
   isLowEndDevice,
   isMobileViewport,
@@ -13,30 +13,9 @@ import { r2Asset } from "@/lib/r2-public";
 
 type IntroOverlayProps = {
   onComplete: () => void;
+  /** Misma URL que el hero del inicio (y última tarjeta del moodboard). */
+  heroImageSrc: string;
 };
-
-/**
- * Activos a precargar antes de soltar el contador al 100%.
- *
- * Nota crítica de performance:
- *  - Las imágenes del moodboard se muestran vía `next/image` que sirve variantes WebP/AVIF
- *    (URLs `/_next/image?url=...`). Si precargáramos los PNG originales, el móvil bajaría
- *    TODO dos veces (original + variante optimizada). Por eso solo precargamos:
- *      • Hero (aparece inmediato tras la intro, full-bleed, necesitamos calidad).
- *      • Logo de la intro.
- *      • Las 2 primeras tarjetas del moodboard (las primeras en aparecer y entrar al viewport),
- *        para que el collage no arranque con placeholders vacíos.
- *  - El resto del moodboard lo carga `next/image` con `priority` mientras la animación corre.
- *
- * Deduplicado con `Set` por si el hero coincide con alguna del moodboard.
- */
-const PRELOAD_IMAGES: string[] = Array.from(
-  new Set<string>([
-    r2Asset("fondo-hero.jpg"),
-    r2Asset("logo.png"),
-    ...MOODBOARD_ITEMS.slice(0, 2).map((m) => m.src),
-  ])
-);
 
 /**
  * Preload con hard-cap de tiempo: si alguna imagen se cuelga (red lenta, 404 silencioso, etc.)
@@ -86,12 +65,28 @@ function preloadImages(
   });
 }
 
-export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
+export default function IntroOverlay({ onComplete, heroImageSrc }: IntroOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLSpanElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
   const [loadDone, setLoadDone] = useState(false);
   const displayPct = useRef(0);
+
+  /**
+   * Precarga: hero, logo, 2 primeras tarjetas del moodboard (con hero ya aplicado en la 6.ª).
+   * `Set` por si el hero coincide con otra URL.
+   */
+  const preloadUrls = useMemo(
+    () =>
+      Array.from(
+        new Set<string>([
+          heroImageSrc,
+          r2Asset("logo.png"),
+          ...getMoodboardItems(heroImageSrc).slice(0, 2).map((m) => m.src),
+        ])
+      ),
+    [heroImageSrc]
+  );
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -140,7 +135,7 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
       }
     });
 
-    preloadImages(PRELOAD_IMAGES, (pct) => {
+    preloadImages(preloadUrls, (pct) => {
       targetPct = pct;
     }, hardCapMs).then(() => {
       targetPct = 100;
@@ -157,7 +152,7 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
     return () => {
       gsap.ticker.remove(ticker);
     };
-  }, [onComplete]);
+  }, [onComplete, preloadUrls]);
 
   useEffect(() => {
     if (!loadDone) return;

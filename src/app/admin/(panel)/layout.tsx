@@ -26,6 +26,9 @@ export default function AdminPanelLayout({
             <Link href="/admin/featured" className="hover:text-charcoal">
               Destacados
             </Link>
+            <Link href="/admin/site-images" className="hover:text-charcoal">
+              Imágenes del sitio
+            </Link>
             <Link href="/" className="text-warm-gray hover:text-charcoal">
               Ver sitio
             </Link>

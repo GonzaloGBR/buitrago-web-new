@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { useFadeUpOnScroll } from "@/lib/use-fade-up-on-scroll";
+import { shouldUnoptimizeImage } from "@/lib/image-url";
 
 const marqueeItems = [
   "Muebles artesanales",
@@ -53,7 +54,7 @@ export default function MarqueeSection() {
   );
 }
 
-export function PhilosophySection() {
+export function PhilosophySection({ imageSrc }: { imageSrc: string }) {
   const sectionRef = useRef<HTMLElement>(null);
   const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
@@ -82,9 +83,10 @@ export function PhilosophySection() {
         <div ref={leftRef} className="opacity-0">
           <div className="relative aspect-[4/5] overflow-hidden">
             <Image
-              src="/detail-joinery.png"
+              src={imageSrc}
               alt="Detalle de ensamblaje artesanal Buitrago"
               fill
+              unoptimized={shouldUnoptimizeImage(imageSrc)}
               className="object-cover transition-transform duration-[2.2s] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.03]"
               sizes="(max-width: 768px) 100vw, 50vw"
             />

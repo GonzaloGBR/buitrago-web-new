@@ -53,6 +53,12 @@ async function main() {
       data: { position: row.position, productId: row.productId },
     });
   }
+
+  await prisma.siteContent.upsert({
+    where: { id: 1 },
+    create: { id: 1 },
+    update: {},
+  });
 }
 
 main()
