@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import PublicTopNav from "@/components/PublicTopNav";
 
 export default function CategoriaLayout({
@@ -9,6 +10,7 @@ export default function CategoriaLayout({
     <>
       <PublicTopNav />
       {children}
+      <Footer />
     </>
   );
 }

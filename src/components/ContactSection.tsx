@@ -2,11 +2,6 @@
 
 import { useRef } from "react";
 import Link from "next/link";
-import {
-  SITE_CONTACT_EMAIL,
-  SITE_CONTACT_PHONE_DISPLAY,
-  SITE_CONTACT_PHONE_TEL,
-} from "@/lib/site-contact";
 import { useFadeUpOnScroll } from "@/lib/use-fade-up-on-scroll";
 
 export default function ContactSection() {
@@ -69,45 +64,6 @@ export default function ContactSection() {
             <span>Formulario de contacto</span>
             <span>→</span>
           </Link>
-
-          {/* Contact Details */}
-          <div className="mt-14 pt-10 border-t border-warm-gray/20 grid grid-cols-1 gap-8 text-center sm:mt-20 sm:pt-12 md:grid-cols-3 md:text-left">
-            <div>
-              <p className="text-label text-warm-gray mb-3">Visítanos</p>
-              <p className="text-body-elegant text-cream/80 text-sm">
-                Salta, Argentina
-              </p>
-            </div>
-            <div>
-              <p className="text-label text-warm-gray mb-3">Escríbenos</p>
-              <a
-                href={`mailto:${SITE_CONTACT_EMAIL}`}
-                className="text-body-elegant break-all text-sm text-cream/80 transition-colors duration-500 hover:text-accent"
-              >
-                {SITE_CONTACT_EMAIL}
-              </a>
-              <a
-                href={`tel:${SITE_CONTACT_PHONE_TEL}`}
-                className="mt-2 block text-body-elegant text-sm text-cream/80 transition-colors duration-500 hover:text-accent"
-              >
-                {SITE_CONTACT_PHONE_DISPLAY}
-              </a>
-            </div>
-            <div>
-              <p className="text-label text-warm-gray mb-3">Síguenos</p>
-              <div className="flex justify-center gap-6 md:justify-start">
-                {["Instagram", "Pinterest"].map((social) => (
-                  <a
-                    key={social}
-                    href="#"
-                    className="text-label text-cream/80 transition-colors duration-500 hover:text-accent"
-                  >
-                    {social}
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

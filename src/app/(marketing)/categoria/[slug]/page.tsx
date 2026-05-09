@@ -64,14 +64,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               {category.tagline}
             </p>
           </div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-cream-dark">
+          <div className="relative mx-auto aspect-[4/3] w-full max-w-xs overflow-hidden rounded-sm bg-cream-dark sm:max-w-sm md:mx-0 md:max-w-md lg:max-w-lg">
             <CatalogImage
               src={category.image}
               alt={category.name}
               fill
               className="object-cover"
               priority
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes="(max-width: 768px) 360px, (max-width: 1200px) 400px, 448px"
             />
           </div>
         </div>
