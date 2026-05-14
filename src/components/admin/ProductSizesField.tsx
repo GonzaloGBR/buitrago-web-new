@@ -94,17 +94,18 @@ export default function ProductSizesField({ defaultSizes }: Props) {
   return (
     <fieldset className="space-y-3">
       <legend className={ADMIN_LABEL_CLASS}>
-        Medidas y precios (opcional)
+        Medidas (opcional)
       </legend>
       <p className="font-sans text-xs text-warm-gray">
-        Cada fila representa una variante seleccionable por el cliente. Si dejás
-        este bloque vacío, el producto se mostrará con un único precio (el de
-        arriba). El orden definido aquí es el que verá el cliente.
+        Cada fila es una opción en el desplegable «Medidas» de la ficha. El precio por fila es
+        opcional y no se muestra en la web: el cliente cotiza por WhatsApp. Si dejás este bloque
+        vacío, el producto solo muestra la medida/dimensiones del campo de arriba (sin selector).
       </p>
 
       {rows.length === 0 ? (
         <p className="rounded-sm border border-dashed border-charcoal/20 bg-white px-3 py-4 font-sans text-xs text-warm-gray">
-          Sin variantes. El producto usará el precio principal.
+          Sin variantes: el cliente no verá desplegable de medidas (solo dimensiones del
+          producto si las cargaste arriba).
         </p>
       ) : (
         <ul className="space-y-2">
@@ -129,8 +130,8 @@ export default function ProductSizesField({ defaultSizes }: Props) {
                 />
               </div>
               <AdminInput
-                aria-label={`Precio de la medida ${i + 1}`}
-                placeholder="$2.819.000"
+                aria-label={`Precio de la medida ${i + 1} (opcional, no se publica)`}
+                placeholder="Opcional (no se muestra)"
                 value={r.price}
                 onChange={(e) => updateRow(r.key, { price: e.target.value })}
                 className="w-full sm:w-44"

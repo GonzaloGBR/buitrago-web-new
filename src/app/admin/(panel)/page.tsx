@@ -30,7 +30,25 @@ export default function AdminHomePage() {
         >
           <h2 className="font-serif text-xl text-charcoal">Productos</h2>
           <p className="mt-2 font-sans text-sm text-warm-gray">
-            Precios, medidas, textos, imágenes y galería.
+            Medidas, textos, imágenes y galería. El precio es opcional (consulta por WhatsApp).
+          </p>
+        </Link>
+        <Link
+          href="/admin/maderas"
+          className="rounded-sm border border-charcoal/10 bg-white p-6 shadow-sm transition hover:border-charcoal/25"
+        >
+          <h2 className="font-serif text-xl text-charcoal">Maderas</h2>
+          <p className="mt-2 font-sans text-sm text-warm-gray">
+            Catálogo global del desplegable «Madera» en la ficha de producto.
+          </p>
+        </Link>
+        <Link
+          href="/admin/acabados"
+          className="rounded-sm border border-charcoal/10 bg-white p-6 shadow-sm transition hover:border-charcoal/25"
+        >
+          <h2 className="font-serif text-xl text-charcoal">Acabados</h2>
+          <p className="mt-2 font-sans text-sm text-warm-gray">
+            Catálogo global del desplegable «Acabado» (mate, brillante, etc.).
           </p>
         </Link>
         <Link

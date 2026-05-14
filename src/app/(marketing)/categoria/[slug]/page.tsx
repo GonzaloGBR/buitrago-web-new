@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import CatalogImage from "@/components/CatalogImage";
 import Link from "next/link";
 import { getCategory, getProductsByCategory } from "@/data/catalog";
+import { hasReferencePrice } from "@/lib/reference-price";
 
 export const dynamic = "force-dynamic";
 
@@ -115,10 +116,18 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                   <span className="truncate">{product.dimensions}</span>
                 </div>
 
-                <div className="mt-3 flex flex-col gap-3 sm:mt-4 sm:flex-row sm:items-center sm:justify-between">
-                  <span className="font-serif text-lg text-charcoal sm:text-xl md:text-[1.35rem]">
-                    {product.price}
-                  </span>
+                <div
+                  className={
+                    hasReferencePrice(product.price)
+                      ? "mt-3 flex flex-col gap-3 sm:mt-4 sm:flex-row sm:items-center sm:justify-between"
+                      : "mt-3 flex justify-end sm:mt-4"
+                  }
+                >
+                  {hasReferencePrice(product.price) ? (
+                    <span className="font-serif text-lg text-charcoal sm:text-xl md:text-[1.35rem]">
+                      {product.price}
+                    </span>
+                  ) : null}
                   <span className="inline-flex w-fit items-center gap-2 rounded-sm border border-charcoal/20 px-3 py-1.5 font-sans text-[0.58rem] uppercase tracking-[0.16em] text-charcoal/70 transition-all duration-300 group-hover:border-charcoal group-hover:text-charcoal sm:px-4 sm:py-2 sm:text-[0.62rem] sm:tracking-[0.18em]">
                     Consultar
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0">

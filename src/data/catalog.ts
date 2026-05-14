@@ -203,3 +203,32 @@ export async function getFeaturedProductIds(): Promise<
     return [];
   }
 }
+
+/** Opción de catálogo global (madera / acabado); una fila en BD por opción, no por producto. */
+export type CatalogOptionRow = {
+  id: number;
+  slug: string;
+  label: string;
+};
+
+export async function getWoodSpecies(): Promise<CatalogOptionRow[]> {
+  try {
+    const rows = await prisma.woodSpecies.findMany({
+      orderBy: [{ position: "asc" }, { id: "asc" }],
+    });
+    return rows.map((r) => ({ id: r.id, slug: r.slug, label: r.label }));
+  } catch {
+    return [];
+  }
+}
+
+export async function getFinishOptions(): Promise<CatalogOptionRow[]> {
+  try {
+    const rows = await prisma.finishOption.findMany({
+      orderBy: [{ position: "asc" }, { id: "asc" }],
+    });
+    return rows.map((r) => ({ id: r.id, slug: r.slug, label: r.label }));
+  } catch {
+    return [];
+  }
+}

@@ -23,6 +23,12 @@ export default function AdminPanelLayout({
             <Link href="/admin/products" className="hover:text-charcoal">
               Productos
             </Link>
+            <Link href="/admin/maderas" className="hover:text-charcoal">
+              Maderas
+            </Link>
+            <Link href="/admin/acabados" className="hover:text-charcoal">
+              Acabados
+            </Link>
             <Link href="/admin/featured" className="hover:text-charcoal">
               Destacados
             </Link>

@@ -4,6 +4,25 @@ import { categories, products } from "../src/data/products";
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.finishOption.deleteMany();
+  await prisma.woodSpecies.deleteMany();
+  await prisma.woodSpecies.createMany({
+    data: [
+      { slug: "cedro", label: "Cedro", position: 0 },
+      { slug: "roble", label: "Roble", position: 1 },
+      { slug: "nogal", label: "Nogal", position: 2 },
+      { slug: "quina", label: "Quina", position: 3 },
+      { slug: "petiribi", label: "Petiribí", position: 4 },
+    ],
+  });
+  await prisma.finishOption.createMany({
+    data: [
+      { slug: "mate", label: "Mate", position: 0 },
+      { slug: "semi_brillante", label: "Semi-brillante", position: 1 },
+      { slug: "brillante", label: "Brillante", position: 2 },
+    ],
+  });
+
   /** Catálogo nuevo: vaciar tablas relacionadas y volver a crear desde `src/data/products`. */
   await prisma.featuredProduct.deleteMany();
   await prisma.productSize.deleteMany();

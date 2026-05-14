@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import {
   getCategory,
+  getFinishOptions,
   getProduct,
   getProductsByCategory,
+  getWoodSpecies,
 } from "@/data/catalog";
 import ProductDetailClient from "./product-detail-client";
 
@@ -15,9 +17,11 @@ export default async function ProductPage({
 }) {
   const { slug, productId } = await params;
 
-  const [product, category] = await Promise.all([
+  const [product, category, woodSpecies, finishOptions] = await Promise.all([
     getProduct(productId),
     getCategory(slug),
+    getWoodSpecies(),
+    getFinishOptions(),
   ]);
 
   if (!product || !category || product.categorySlug !== slug) {
@@ -34,6 +38,8 @@ export default async function ProductPage({
       product={product}
       category={category}
       similarProducts={similarProducts}
+      woodSpecies={woodSpecies}
+      finishOptions={finishOptions}
     />
   );
 }

@@ -96,11 +96,12 @@ export default function ProductForm(props: Props) {
       </AdminField>
 
       <div className="grid gap-5 sm:grid-cols-2">
-        <AdminField label="Precio principal">
-          <AdminInput name="price" defaultValue={initial?.price} />
-          <p className="mt-1 font-sans text-xs text-warm-gray">
-            Se muestra cuando no hay variantes de medida o como referencia.
-          </p>
+        <AdminField
+          label="Precio principal (opcional)"
+          htmlFor="product-price"
+          hint="Vacío = solo consulta por WhatsApp. Si completás un valor, se muestra en la ficha como referencia fija (no cambia con la medida)."
+        >
+          <AdminInput id="product-price" name="price" defaultValue={initial?.price === "—" ? "" : initial?.price} />
         </AdminField>
         <AdminField label="Dimensiones">
           <AdminInput name="dimensions" defaultValue={initial?.dimensions} />

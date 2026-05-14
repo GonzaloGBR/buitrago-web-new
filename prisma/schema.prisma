@@ -53,6 +53,22 @@ model ProductSize {
   @@index([productId, position])
 }
 
+/// Maderas disponibles para cotización (catálogo único; no se duplica por producto).
+model WoodSpecies {
+  id       Int    @id @default(autoincrement())
+  slug     String @unique
+  label    String
+  position Int    @default(0)
+}
+
+/// Acabados disponibles (catálogo único).
+model FinishOption {
+  id       Int    @id @default(autoincrement())
+  slug     String @unique
+  label    String
+  position Int    @default(0)
+}
+
 /// Las 4 piezas del bloque «Descubre nuestras piezas destacadas» (orden = position 1–4).
 model FeaturedProduct {
   position  Int     @id
