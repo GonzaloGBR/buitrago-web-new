@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import CatalogImage from "@/components/CatalogImage";
+import ProductCardImage from "@/components/ProductCardImage";
 import Link from "next/link";
-import { hasReferencePrice } from "@/lib/reference-price";
+import { getProductListPriceLabel, hasReferencePrice } from "@/lib/reference-price";
 import { SITE_WHATSAPP_URL } from "@/lib/site-contact";
 import type { CatalogOptionRow, Category, Product, ProductSize } from "@/data/catalog";
 
@@ -267,11 +268,10 @@ export default function ProductDetailClient({
           </div>
 
           <div className="relative aspect-[4/5] overflow-hidden bg-cream-dark">
-            <CatalogImage
+            <ProductCardImage
               src={product.gallery[activeImg]}
               alt={`${product.name} — vista principal`}
-              fill
-              className="object-cover transition-opacity duration-500"
+              className="transition-opacity duration-500"
               priority
               sizes="(max-width: 768px) 100vw, 45vw"
             />
@@ -423,11 +423,10 @@ export default function ProductDetailClient({
                 className="group block no-underline"
               >
                 <div className="relative aspect-[4/5] overflow-hidden bg-cream-dark">
-                  <CatalogImage
+                  <ProductCardImage
                     src={p.image}
                     alt={p.name}
-                    fill
-                    className="object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.04]"
+                    className="transition-transform duration-[1.4s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.04]"
                     sizes="(max-width: 768px) 50vw, 33vw"
                   />
                   <span className="absolute left-2 top-2 rounded-sm bg-charcoal/80 px-2 py-1 font-sans text-[0.55rem] font-medium uppercase tracking-[0.12em] text-cream/95 backdrop-blur-sm sm:left-3 sm:top-3 sm:px-3 sm:py-1.5 sm:text-[0.6rem] sm:tracking-[0.15em]">
@@ -435,9 +434,9 @@ export default function ProductDetailClient({
                   </span>
                 </div>
                 <h3 className="heading-editorial mt-3 text-base text-charcoal sm:mt-4 sm:text-lg">{p.name}</h3>
-                {hasReferencePrice(p.price) ? (
-                  <p className="mt-1 font-serif text-sm text-charcoal/70 sm:text-base">{p.price}</p>
-                ) : null}
+                <p className="mt-1 font-serif text-sm text-charcoal/70 sm:text-base">
+                  {getProductListPriceLabel(p.price)}
+                </p>
               </Link>
             ))}
           </div>

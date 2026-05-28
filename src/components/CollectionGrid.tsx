@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import CatalogImage from "@/components/CatalogImage";
-import { hasReferencePrice } from "@/lib/reference-price";
+import ProductCardImage from "@/components/ProductCardImage";
+import { getProductListPriceLabel } from "@/lib/reference-price";
 import type { FeaturedHomeItem } from "@/data/catalog";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -112,12 +112,11 @@ export default function FeaturedProducts({ items }: Props) {
               href={product.href}
               className="block cursor-pointer no-underline"
             >
-              <div className="relative mb-4 aspect-[3/4] overflow-hidden bg-cream-dark">
-                <CatalogImage
+              <div className="relative mb-4 aspect-[4/5] overflow-hidden bg-cream-dark">
+                <ProductCardImage
                   src={product.image}
                   alt={product.name}
-                  fill
-                  className="product-img object-cover transition-transform duration-[1.6s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
+                  className="product-img transition-transform duration-[1.6s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.06]"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
@@ -126,9 +125,9 @@ export default function FeaturedProducts({ items }: Props) {
                 <p className="text-label tracking-[0.15em] text-charcoal">
                   {product.name}
                 </p>
-                {hasReferencePrice(product.price) ? (
-                  <p className="text-label mt-1.5 text-warm-gray">{product.price}</p>
-                ) : null}
+                <p className="text-label mt-1.5 text-warm-gray">
+                  {getProductListPriceLabel(product.price)}
+                </p>
               </div>
             </Link>
           </div>

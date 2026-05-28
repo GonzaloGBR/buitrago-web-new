@@ -308,20 +308,25 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
             href={item.href}
             onClick={(e) => goToMenuSection(e, item.href)}
             className={`heading-display text-[clamp(2.5rem,11vw,4.5rem)] leading-tight text-cream hover:text-accent md:text-7xl ${
-              menuOpen && siteChromeVisible
-                ? "transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]"
-                : "transition-none"
+              menuOpen && siteChromeVisible ? "" : "transition-none"
             } ${
               menuOpen && siteChromeVisible && menuEnterReady
                 ? "translate-y-0 opacity-100"
                 : "pointer-events-none translate-y-6 opacity-0"
             }`}
-            style={{
-              transitionDelay:
-                menuOpen && siteChromeVisible && menuEnterReady
-                  ? `${200 + i * 150}ms`
-                  : "0ms",
-            }}
+            style={
+              menuOpen && siteChromeVisible
+                ? {
+                    transitionProperty: "transform, opacity, color",
+                    transitionDuration: "700ms, 700ms, 150ms",
+                    transitionTimingFunction:
+                      "cubic-bezier(0.19, 1, 0.22, 1), cubic-bezier(0.19, 1, 0.22, 1), ease-out",
+                    transitionDelay: menuEnterReady
+                      ? `${200 + i * 150}ms, ${200 + i * 150}ms, 0ms`
+                      : "0ms, 0ms, 0ms",
+                  }
+                : undefined
+            }
           >
             {item.label}
           </a>

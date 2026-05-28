@@ -43,7 +43,7 @@ export default function MarqueeSection() {
           <span
             key={i}
             className={`heading-editorial text-2xl md:text-[2.15rem] ${
-              item === "•" ? "text-accent/35" : "text-charcoal/12"
+              item === "•" ? "text-gold/70" : "text-charcoal/85"
             }`}
           >
             {item}

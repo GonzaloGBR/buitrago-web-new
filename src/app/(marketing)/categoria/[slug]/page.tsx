@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import CatalogImage from "@/components/CatalogImage";
+import ProductCardImage from "@/components/ProductCardImage";
 import Link from "next/link";
 import { getCategory, getProductsByCategory } from "@/data/catalog";
 import { hasReferencePrice } from "@/lib/reference-price";
@@ -88,11 +89,10 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               className="group block no-underline"
             >
               <div className="relative aspect-[4/5] overflow-hidden bg-cream-dark">
-                <CatalogImage
+                <ProductCardImage
                   src={product.image}
                   alt={product.name}
-                  fill
-                  className="object-cover transition-transform duration-[1.6s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.04]"
+                  className="transition-transform duration-[1.6s] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover:scale-[1.04]"
                   sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, 33vw"
                 />
                 {/* Wood badge */}

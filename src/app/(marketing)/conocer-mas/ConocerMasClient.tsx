@@ -22,7 +22,7 @@ const VALORES = [
   {
     num: "01",
     title: "Madera noble",
-    text: "Trabajamos con robles, nogales y cerezos curados al aire durante años. Cada tabla se elige pieza por pieza.",
+    text: "Trabajamos cedro, petiribí, quina y otras maderas de la región. Cada tabla se elige pieza por pieza, con la paciencia que pide el oficio.",
   },
   {
     num: "02",
@@ -50,7 +50,7 @@ const PROCESO = [
   {
     step: "Taller",
     lead: "Manos sobre madera",
-    text: "Cepillado, trazado, corte y ensamble. Cada operación sigue el orden que tres generaciones afinaron.",
+    text: "Cepillado, trazado, corte y ensamble. Cada operación sigue el orden que Rubén afinó durante décadas en su taller.",
   },
   {
     step: "Entrega",
@@ -60,15 +60,42 @@ const PROCESO = [
 ];
 
 const MADERAS = [
-  { nombre: "Roble europeo", tono: "Cálido medio", uso: "Mesas y estanterías" },
-  { nombre: "Nogal americano", tono: "Chocolate profundo", uso: "Escritorios y piezas centrales" },
-  { nombre: "Cerezo", tono: "Rojizo cálido", uso: "Sillas y piezas pequeñas" },
-  { nombre: "Fresno", tono: "Claro veteado", uso: "Detalles y contrastes" },
+  { nombre: "Cedro salteño", tono: "Cálido aromático", uso: "Muebles, guardados y piezas interiores" },
+  { nombre: "Petiribí", tono: "Dorado veteado", uso: "Mesas y piezas centrales" },
+  { nombre: "Quina colorada", tono: "Rojo profundo", uso: "Escritorios y detalles de autor" },
+  { nombre: "Pino paranaense", tono: "Claro uniforme", uso: "Estructuras y complementos" },
 ];
+
+/** Fotos editoriales con `next/image` (fill + sizes + calidad). */
+function EditorialPhoto({
+  src,
+  alt,
+  sizes,
+  className = "object-cover",
+  priority = false,
+}: {
+  src: string;
+  alt: string;
+  sizes: string;
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      priority={priority}
+      quality={90}
+      sizes={sizes}
+      unoptimized={shouldUnoptimizeImage(src)}
+      className={className}
+    />
+  );
+}
 
 export default function ConocerMasClient({ images }: { images: ConocerMasImages }) {
   const heroRef = useRef<HTMLElement>(null);
-  const heroImgRef = useRef<HTMLDivElement>(null);
   const heroTitleRef = useRef<HTMLHeadingElement>(null);
   const heroLabelRef = useRef<HTMLSpanElement>(null);
   const heroSubRef = useRef<HTMLParagraphElement>(null);
@@ -97,11 +124,6 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
      */
     const ctx = gsap.context(() => {
       // HERO entry
-      gsap.fromTo(
-        heroImgRef.current,
-        { scale: 1.12 },
-        { scale: 1, duration: 2.2, ease: "power3.out" }
-      );
       gsap.fromTo(
         heroLabelRef.current,
         { y: 24, opacity: 0 },
@@ -210,45 +232,54 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
         className="relative overflow-hidden"
         aria-label="Presentación Conocer más"
       >
-        <div
-          ref={heroImgRef}
-          className="absolute inset-0 will-change-transform"
-        >
-          <Image
-            src={images.conocerMasHeroImage}
-            alt="Taller Buitrago: manos y herramientas sobre madera"
-            fill
-            priority
-            unoptimized={shouldUnoptimizeImage(images.conocerMasHeroImage)}
-            className="object-cover object-center"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(22,20,18,0.72)_0%,rgba(22,20,18,0.45)_45%,rgba(22,20,18,0.25)_100%)]" />
+        {/* Alejar la foto: capa grande con escala compensada para cubrir sin bandas */}
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute left-1/2 top-1/2 h-[188%] w-[188%] origin-center -translate-x-1/2 -translate-y-1/2 scale-[0.52] sm:h-[156%] sm:w-[156%] sm:scale-[0.64] md:h-[139%] md:w-[139%] md:scale-[0.72]">
+            <div className="relative h-full w-full">
+              <EditorialPhoto
+                src={images.conocerMasHeroImage}
+                alt="Cajonera de madera noble Buitrago en ambiente de interior"
+                sizes="100vw"
+                priority
+                className="object-cover object-[34%_84%] brightness-[1.02] saturate-[1.04] sm:object-[50%_80%] md:object-[50%_78%]"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="pointer-events-none absolute inset-0" aria-hidden>
+          {/* Móvil: mueble centrado detrás del texto; oscurecer solo la base */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(22,20,18,0.88)_0%,rgba(22,20,18,0.5)_38%,rgba(22,20,18,0.12)_62%,transparent_78%)] sm:hidden" />
+          {/* Tablet/desktop: texto a la derecha */}
+          <div className="absolute inset-0 hidden bg-[radial-gradient(ellipse_95%_85%_at_100%_100%,rgba(22,20,18,0.78)_0%,rgba(22,20,18,0.42)_48%,transparent_72%)] sm:block" />
+          <div className="absolute inset-0 hidden bg-[linear-gradient(285deg,rgba(22,20,18,0.62)_0%,rgba(22,20,18,0.22)_42%,transparent_68%)] sm:block" />
+          <div className="absolute inset-0 hidden bg-[linear-gradient(to_top,rgba(22,20,18,0.38)_0%,transparent_48%)] sm:block" />
         </div>
 
-        <div className="section-editorial relative flex min-h-[70svh] flex-col justify-end pb-12 pt-24 sm:pb-16 sm:pt-32 md:min-h-[78svh] md:pb-24 md:pt-40">
-          <span
-            ref={heroLabelRef}
-            className="text-label mb-5 block text-cream/70 opacity-0 sm:mb-6"
-          >
-            Nuestra historia
-          </span>
-          <h1
-            ref={heroTitleRef}
-            className="heading-display max-w-[18ch] text-[clamp(2.25rem,8vw,5.75rem)] leading-[1.02] text-cream opacity-0"
-          >
-            La nobleza de lo
-            <br />
-            hecho <span className="italic text-accent">a mano</span>
-          </h1>
-          <p
-            ref={heroSubRef}
-            className="mt-6 max-w-xl text-sm leading-relaxed text-cream/80 opacity-0 sm:mt-8 sm:text-base"
-          >
-            Somos Buitrago. Tres generaciones de carpinteros trabajando madera
-            noble en un taller donde cada herramienta tiene nombre y cada pieza,
-            una historia que merece contarse.
-          </p>
+        <div className="section-editorial relative flex min-h-[78svh] flex-col items-stretch justify-end pb-10 pt-28 text-left sm:min-h-[70svh] sm:items-end sm:pb-16 sm:pt-32 sm:text-right md:min-h-[78svh] md:pb-24 md:pt-40">
+          <div className="w-full max-w-none [text-shadow:0_2px_28px_rgba(22,20,18,0.65)] sm:max-w-2xl">
+            <span
+              ref={heroLabelRef}
+              className="text-label mb-5 block text-cream/85 opacity-0 sm:mb-6"
+            >
+              Nuestra historia
+            </span>
+            <h1
+              ref={heroTitleRef}
+              className="heading-display max-w-[18ch] text-[clamp(2.25rem,8vw,5.75rem)] leading-[1.02] text-cream opacity-0"
+            >
+              La nobleza de lo
+              <br />
+              hecho <span className="italic text-accent">a mano</span>
+            </h1>
+            <p
+              ref={heroSubRef}
+              className="mt-6 max-w-xl text-sm leading-relaxed text-cream/90 opacity-0 sm:mt-8 sm:text-base"
+            >
+              En Salta, Rubén Buitrago aprendió el oficio con máquinas hechas a
+              mano y una obsesión por hacer las cosas bien. Hoy, su hijo
+              Gonzalo lleva ese fuego en el mismo taller.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -261,17 +292,15 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[1fr_1.1fr] md:gap-16 lg:gap-24">
           <div className="story-reveal order-2 opacity-0 md:order-1">
             <div className="relative aspect-[4/5] overflow-hidden bg-cream-dark">
-              <Image
+              <EditorialPhoto
                 src={images.conocerMasStoryImage}
                 alt="Detalle de ensamblaje — unión a cola de milano"
-                fill
-                unoptimized={shouldUnoptimizeImage(images.conocerMasStoryImage)}
-                className="object-cover transition-transform duration-[2.2s] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.03]"
                 sizes="(max-width: 768px) 100vw, 45vw"
+                className="object-cover transition-transform duration-[2.2s] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.03]"
               />
             </div>
             <p className="mt-4 font-serif text-xs italic text-warm-gray sm:text-sm">
-              Unión a cola de milano — roble europeo curado 6 años.
+              Ensamble a cola de milano — petiribí seleccionado a mano.
             </p>
           </div>
 
@@ -280,27 +309,34 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
               Origen
             </span>
             <h2 className="story-reveal heading-editorial mb-6 text-[clamp(1.875rem,5.5vw,3rem)] leading-[1.12] text-charcoal opacity-0 sm:mb-8 md:text-5xl">
-              Un oficio que
+              Un apellido,
               <br />
-              <span className="text-warm-gray">no se enseña en libros.</span>
+              <span className="text-warm-gray">un oficio de verdad.</span>
             </h2>
             <p className="story-reveal text-body-elegant mb-5 max-w-md text-sm text-warm-gray opacity-0 sm:mb-6 sm:text-base">
-              Buitrago nació en 1962 en un pequeño taller al norte de Buenos
-              Aires. El abuelo, Don Emilio, llegó con una caja de herramientas
-              heredada de su padre y la certeza de que un mueble bien hecho
-              acompaña a una familia por generaciones.
+              Todo empezó con Rubén Buitrago. Llegó al oficio en Salta capital,
+              trabajando como empleado en un taller ajeno, con máquinas de madera
+              hechas a mano y la convicción de aprender cada detalle desde adentro.
             </p>
             <p className="story-reveal text-body-elegant mb-5 max-w-md text-sm text-warm-gray opacity-0 sm:mb-6 sm:text-base">
-              Hoy el taller lo lleva la tercera generación. Cambiamos algunas
-              máquinas, pero no los principios: escuchar al cliente, respetar
-              la madera, tomarse el tiempo necesario.
+              Cuando supo que era hora de ir por su propio camino, compró su
+              terreno y fue armando el taller pieza por pieza: comprando herramientas,
+              fabricando máquinas, trabajando durante décadas con la misma
+              constancia de quien construye algo propio sin atajos.
+            </p>
+            <p className="story-reveal text-body-elegant mb-5 max-w-md text-sm text-warm-gray opacity-0 sm:mb-6 sm:text-base">
+              Lo que Rubén construyó no quedó en el pasado. Hoy vive en
+              Gonzalo —su hijo—, que tomó el relevo con la misma pasión:
+              escuchar antes de diseñar, elegir bien la madera y trabajar sin
+              prisa, porque un mueble digno de llevar este apellido no admite
+              atajos.
             </p>
             <p className="story-reveal text-body-elegant max-w-md text-sm italic text-charcoal/70 opacity-0 sm:text-base">
-              “Un mueble Buitrago no se termina cuando sale del taller.
-              Termina cuando tus nietos todavía lo usan.”
+              “Mi padre no dejó solo un taller. Dejó un modo de hacer las
+              cosas. Eso es lo que hoy firmo con cada pieza que sale de acá.”
             </p>
             <p className="story-reveal mt-3 font-serif text-xs text-warm-gray opacity-0 sm:text-sm">
-              — Don Emilio Buitrago, fundador.
+              — Gonzalo Buitrago
             </p>
           </div>
         </div>
@@ -369,12 +405,9 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
             </p>
 
             <div className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden bg-cream-dark sm:mt-12">
-              <Image
+              <EditorialPhoto
                 src={images.conocerMasProcesoImage}
                 alt="Taller Buitrago en actividad"
-                fill
-                unoptimized={shouldUnoptimizeImage(images.conocerMasProcesoImage)}
-                className="object-cover"
                 sizes="(max-width: 768px) 100vw, 40vw"
               />
             </div>
@@ -437,31 +470,31 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
               Linaje
             </span>
             <h2 className="heading-editorial text-[clamp(1.875rem,5.5vw,3rem)] leading-[1.12] text-cream md:text-5xl">
-              Tres generaciones,
+              Padre e hijo,
               <br />
-              <span className="text-accent">una misma mesa.</span>
+              <span className="text-accent">un mismo taller.</span>
             </h2>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-10">
             {[
               {
-                year: "1962",
-                name: "Don Emilio",
-                role: "Fundador",
-                text: "Abre el taller con un banco, una sierra de mano y la disciplina aprendida de su padre, ebanista en Galicia.",
+                year: "Salta",
+                name: "Rubén Buitrago",
+                role: "El origen",
+                text: "Empezó como empleado en un taller de la capital salteña, aprendiendo el oficio con máquinas de madera hechas a mano y la disciplina de quien observa antes de actuar.",
               },
               {
-                year: "1988",
-                name: "Ricardo",
+                year: "Décadas",
+                name: "El taller propio",
+                role: "Construido paso a paso",
+                text: "Compró su terreno y fue armando el espacio de trabajo poco a poco: herramientas, máquinas, experiencia. Así trabajó durante décadas, sin prisa y sin renunciar a la calidad.",
+              },
+              {
+                year: "Hoy",
+                name: "Gonzalo Buitrago",
                 role: "Segunda generación",
-                text: "Incorpora maquinaria sin renunciar a los ensambles tradicionales. Sistematiza el curado de la madera en los tiempos que pide cada especie.",
-              },
-              {
-                year: "2014",
-                name: "Martín y Lucía",
-                role: "Tercera generación",
-                text: "Traen el diseño contemporáneo y la colaboración con arquitectos. Abren el taller a los clientes: cada pieza se ve crecer.",
+                text: "Hoy Gonzalo continúa la historia que Rubén empezó: el mismo taller, las maderas de la región y la convicción de que cada pieza lleva algo de quienes somos.",
               },
             ].map((g) => (
               <article
@@ -502,9 +535,9 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
             </h2>
           </div>
           <p className="max-w-sm font-sans text-sm text-warm-gray sm:text-base">
-            Elegimos especies por su comportamiento a través del tiempo, no por
-            moda. Todas pasan por un curado mínimo de cuatro años antes de
-            llegar al banco de trabajo.
+            Elegimos especies nativas por su comportamiento a través del tiempo,
+            no por moda. Cedro, petiribí, quina y otras maderas de la región,
+            seleccionadas con criterio antes de llegar al banco de trabajo.
           </p>
         </div>
 
@@ -535,15 +568,14 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
       {/* ─────────── CTA FINAL ─────────── */}
       <section className="relative overflow-hidden bg-charcoal text-cream">
         <div className="pointer-events-none absolute inset-0 opacity-20">
-          <Image
-            src={images.conocerMasCtaImage}
-            alt=""
-            fill
-            aria-hidden
-            unoptimized={shouldUnoptimizeImage(images.conocerMasCtaImage)}
-            className="object-cover"
-            sizes="100vw"
-          />
+          <div className="relative h-full w-full">
+            <EditorialPhoto
+              src={images.conocerMasCtaImage}
+              alt=""
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
           <div className="absolute inset-0 bg-charcoal/75" />
         </div>
 
