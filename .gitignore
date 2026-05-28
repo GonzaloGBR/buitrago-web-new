@@ -20,6 +20,10 @@
 /.next/
 /out/
 
+# astro (no usar — residuos de caché/build)
+/.astro/
+/dist/
+
 # production
 /build
 
