@@ -94,6 +94,11 @@ model Inquiry {
 model SiteContent {
   id                     Int      @id @default(1)
   homeHeroImage          String   @default("") @db.VarChar(2048)
+  moodboardCollage1      String   @default("") @db.VarChar(800)
+  moodboardCollage2      String   @default("") @db.VarChar(800)
+  moodboardCollage3      String   @default("") @db.VarChar(800)
+  moodboardCollage4      String   @default("") @db.VarChar(800)
+  moodboardCollage5      String   @default("") @db.VarChar(800)
   philosophyImage        String   @default("") @db.VarChar(2048)
   conocerMasHeroImage    String   @default("") @db.VarChar(2048)
   conocerMasStoryImage   String   @default("") @db.VarChar(2048)

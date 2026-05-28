@@ -35,6 +35,17 @@ html::-webkit-scrollbar {
   display: none;
 }
 
+/* Evita flash del hero/nav antes de la intro (%): el script en home añade la clase en <html>. */
+html.home-entrance-pending [data-home-chrome] {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+html.home-entrance-pending body {
+  background-color: var(--color-cream);
+}
+
 body {
   background-color: var(--color-cream);
   color: var(--color-charcoal);

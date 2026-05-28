@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useLayoutEffect } from "react";
+import { useState, useCallback, useEffect, useLayoutEffect, useMemo } from "react";
 import {
   markHomeEntranceConsumed,
   shouldPlayFullHomeEntrance,
@@ -18,7 +18,14 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import type { Category, FeaturedHomeItem } from "@/data/catalog";
+import { getMoodboardCollageUrls } from "@/lib/moodboard-collage";
 import type { SiteContentValues } from "@/lib/site-content-defaults";
+
+const HOME_ENTRANCE_CLASS = "home-entrance-pending";
+
+function clearHomeEntrancePending() {
+  document.documentElement.classList.remove(HOME_ENTRANCE_CLASS);
+}
 
 type Props = {
   categories: Category[];
@@ -27,6 +34,17 @@ type Props = {
 };
 
 export default function HomeClient({ categories, featured, siteContent }: Props) {
+  const moodboardCollage = useMemo(
+    () => getMoodboardCollageUrls(siteContent),
+    [
+      siteContent.homeHeroImage,
+      siteContent.moodboardCollage1,
+      siteContent.moodboardCollage2,
+      siteContent.moodboardCollage3,
+      siteContent.moodboardCollage4,
+      siteContent.moodboardCollage5,
+    ]
+  );
   /**
    * SSR y el PRIMER render del cliente deben producir el mismo HTML — de lo contrario React
    * lanza un "hydration mismatch". Por eso los flags arrancan en `true` (= sitio completo,
@@ -35,12 +53,13 @@ export default function HomeClient({ categories, featured, siteContent }: Props)
    *
    * Un `useLayoutEffect` (que NO corre en server) revisa después si toca jugar la intro
    * — solo ocurre en un reload "real" del documento estando en "/". En ese caso baja los
-   * flags a `false` ANTES del primer paint, con lo que el usuario ve directamente el
-   * IntroOverlay sin flash del sitio.
+   * flags a `false` ANTES del primer paint. El hero no se monta hasta el moodboard (`heroRevealStarted`).
+   * El script en `layout` + `home-entrance-pending` evitan flash del chrome en el primer paint.
    */
   const [preloaderDone, setPreloaderDone] = useState(true);
   const [moodboardDone, setMoodboardDone] = useState(true);
-  const [heroRevealStarted, setHeroRevealStarted] = useState(true);
+  /** `false` en SSR y primer render: el hero no entra al HTML hasta la intro o el skip en layout effect. */
+  const [heroRevealStarted, setHeroRevealStarted] = useState(false);
   const [siteChromeVisible, setSiteChromeVisible] = useState(true);
 
   useLayoutEffect(() => {
@@ -53,6 +72,9 @@ export default function HomeClient({ categories, featured, siteContent }: Props)
       setMoodboardDone(false);
       setHeroRevealStarted(false);
       setSiteChromeVisible(false);
+    } else {
+      clearHomeEntrancePending();
+      setHeroRevealStarted(true);
     }
     markHomeEntranceConsumed();
   }, []);
@@ -73,6 +95,16 @@ export default function HomeClient({ categories, featured, siteContent }: Props)
     setSiteChromeVisible(true);
   }, []);
 
+  /* Si el moodboard no termina (timeline cancelado, GSAP, etc.), forzar salida. */
+  useEffect(() => {
+    if (moodboardDone || !preloaderDone) return;
+    const id = window.setTimeout(() => {
+      setMoodboardDone(true);
+      setHeroRevealStarted(true);
+    }, 14000);
+    return () => window.clearTimeout(id);
+  }, [moodboardDone, preloaderDone]);
+
   /* Si el timeline del Hero falla o se interrumpe antes de `onHeroReady`, no dejar el sitio sin nav ni scroll. */
   useEffect(() => {
     if (siteChromeVisible || !heroRevealStarted) return;
@@ -81,6 +113,12 @@ export default function HomeClient({ categories, featured, siteContent }: Props)
     }, 5000);
     return () => window.clearTimeout(id);
   }, [heroRevealStarted, siteChromeVisible]);
+
+  useEffect(() => {
+    if (siteChromeVisible) {
+      clearHomeEntrancePending();
+    }
+  }, [siteChromeVisible]);
 
   useEffect(() => {
     if (!siteChromeVisible) {
@@ -160,6 +198,7 @@ export default function HomeClient({ categories, featured, siteContent }: Props)
         <IntroOverlay
           onComplete={handleIntroEnd}
           heroImageSrc={siteContent.homeHeroImage}
+          collageImageSrcs={moodboardCollage}
         />
       )}
 
@@ -167,33 +206,38 @@ export default function HomeClient({ categories, featured, siteContent }: Props)
         <MoodboardOverlay
           startAnimation={preloaderDone}
           heroImageSrc={siteContent.homeHeroImage}
+          collageImageSrcs={moodboardCollage}
           onRevealStart={handleMoodboardRevealStart}
           onComplete={handleMoodboardEnd}
         />
       )}
 
-      <Navbar siteChromeVisible={siteChromeVisible} />
+      <div data-home-chrome>
+        <Navbar siteChromeVisible={siteChromeVisible} />
 
-      <main>
-        <Hero
-          animateIn={heroRevealStarted}
-          onHeroReady={handleHeroReady}
-          heroImageSrc={siteContent.homeHeroImage}
-        />
+        <main>
+          {heroRevealStarted && (
+            <Hero
+              animateIn={heroRevealStarted}
+              onHeroReady={handleHeroReady}
+              heroImageSrc={siteContent.homeHeroImage}
+            />
+          )}
 
-        {siteChromeVisible && (
-          <>
-            <MarqueeSection />
-            <PhilosophySection imageSrc={siteContent.philosophyImage} />
-            <FeaturedProducts items={featured} />
-            <CategoriesSection categories={categories} />
-            <TestimonialsSection />
-            <ContactSection />
-          </>
-        )}
-      </main>
+          {siteChromeVisible && (
+            <>
+              <MarqueeSection />
+              <PhilosophySection imageSrc={siteContent.philosophyImage} />
+              <FeaturedProducts items={featured} />
+              <CategoriesSection categories={categories} />
+              <TestimonialsSection />
+              <ContactSection />
+            </>
+          )}
+        </main>
 
-      {siteChromeVisible && <Footer />}
+        {siteChromeVisible && <Footer />}
+      </div>
     </>
   );
 }

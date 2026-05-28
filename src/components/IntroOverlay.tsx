@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import gsap from "gsap";
 import LogoMark from "@/components/LogoMark";
-import { getMoodboardItems } from "@/components/MoodboardOverlay";
+import { getMoodboardItems } from "@/lib/moodboard-collage";
 import {
   isLowEndDevice,
   isMobileViewport,
@@ -15,6 +15,7 @@ type IntroOverlayProps = {
   onComplete: () => void;
   /** Misma URL que el hero del inicio (y última tarjeta del moodboard). */
   heroImageSrc: string;
+  collageImageSrcs: string[];
 };
 
 /**
@@ -65,7 +66,11 @@ function preloadImages(
   });
 }
 
-export default function IntroOverlay({ onComplete, heroImageSrc }: IntroOverlayProps) {
+export default function IntroOverlay({
+  onComplete,
+  heroImageSrc,
+  collageImageSrcs,
+}: IntroOverlayProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLSpanElement>(null);
   const counterRef = useRef<HTMLSpanElement>(null);
@@ -82,10 +87,10 @@ export default function IntroOverlay({ onComplete, heroImageSrc }: IntroOverlayP
         new Set<string>([
           heroImageSrc,
           r2Asset("logo.png"),
-          ...getMoodboardItems(heroImageSrc).slice(0, 2).map((m) => m.src),
+          ...getMoodboardItems(heroImageSrc, collageImageSrcs).map((m) => m.src),
         ])
       ),
-    [heroImageSrc]
+    [heroImageSrc, collageImageSrcs]
   );
 
   useEffect(() => {
