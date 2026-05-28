@@ -1,5 +1,5 @@
-import Link from "next/link";
 import SiteImagesForm from "@/components/admin/SiteImagesForm";
+import AdminPageHeader, { AdminFlash } from "@/components/admin/AdminPageHeader";
 import { getSiteContent } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
@@ -14,31 +14,16 @@ export default async function AdminSiteImagesPage({
 
   return (
     <div className="space-y-8">
-      <div>
-        <Link
-          href="/admin"
-          className="font-sans text-sm text-warm-gray hover:text-charcoal"
-        >
-          ← Volver al panel
-        </Link>
-        <h1 className="mt-4 font-serif text-3xl text-charcoal">
-          Imágenes del sitio
-        </h1>
-        <p className="mt-2 max-w-xl font-sans text-sm text-warm-gray">
-          Hero del inicio, sección «Nuestra filosofía» y todas las fotos
-          principales de la página «Conocer más». Los archivos nuevos se suben
-          al mismo almacenamiento que el catálogo (R2 o{" "}
-          <code className="rounded bg-charcoal/5 px-1 font-mono text-xs">
-            /public/uploads
-          </code>
-          ).
-        </p>
-      </div>
+      <AdminPageHeader
+        title="Imágenes del sitio"
+        description="Pantalla de carga (logo, porcentaje y collage), hero y filosofía del inicio, y las cuatro fotos principales de «Conocer más»."
+      />
 
       {ok ? (
-        <p className="rounded-sm border border-green-200 bg-green-50 px-3 py-2 font-sans text-sm text-green-900">
-          Cambios guardados. El inicio y «Conocer más» se actualizaron.
-        </p>
+        <AdminFlash variant="success">
+          Cambios guardados. Recargá la página de inicio (F5) para ver la pantalla de carga
+          actualizada.
+        </AdminFlash>
       ) : null}
 
       <SiteImagesForm initial={initial} />

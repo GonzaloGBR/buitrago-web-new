@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   createProductAction,
@@ -40,6 +40,15 @@ export default function ProductForm(props: Props) {
     null as ProductFormState
   );
 
+  const [categorySlug, setCategorySlug] = useState(
+    () =>
+      (props.mode === "edit"
+        ? props.initial.categorySlug
+        : props.defaultCategorySlug) ??
+      props.categories[0]?.slug ??
+      ""
+  );
+
   return (
     <form action={formAction} className="max-w-2xl space-y-5">
       {ok ? (
@@ -76,13 +85,12 @@ export default function ProductForm(props: Props) {
         <AdminSelect
           name="categorySlug"
           required
-          defaultValue={
-            props.mode === "edit"
-              ? initial?.categorySlug
-              : defaultCategorySlug ?? ""
-          }
+          value={categorySlug}
+          onChange={(e) => setCategorySlug(e.target.value)}
         >
-          <option value="">— Elegir —</option>
+          <option value="" disabled>
+            — Elegir —
+          </option>
           {props.categories.map((c) => (
             <option key={c.slug} value={c.slug}>
               {c.name}

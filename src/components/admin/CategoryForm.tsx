@@ -90,7 +90,7 @@ export default function CategoryForm(props: Props) {
 
       <AdminImageField
         name="image"
-        label="Imagen (ruta o sube archivo)"
+        label="Imagen de portada de la categoría"
         defaultValue={initial?.image}
         required
       />
