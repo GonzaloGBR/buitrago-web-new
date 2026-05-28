@@ -1,6 +1,5 @@
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
-import SaveContactButton from "@/components/SaveContactButton";
 import {
   SITE_CONTACT_EMAIL,
   SITE_CONTACT_PHONE_DISPLAY,
@@ -24,19 +23,18 @@ export default function Footer() {
               WhatsApp — historias del taller
             </p>
             <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-cream/70 sm:text-base">
-              Guardá nuestro contacto y seguí el taller en{" "}
+              Seguí el taller en{" "}
               <span className="text-cream/90">historias de WhatsApp</span>: proceso, maderas y piezas
               terminadas.
             </p>
-            <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center">
-              <SaveContactButton />
+            <div className="mt-6">
               <a
                 href={SITE_WHATSAPP_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-sans text-[0.8rem] text-cream/50 underline decoration-cream/25 underline-offset-4 transition-colors hover:text-cream/80 hover:decoration-cream/50"
+                className="btn-editorial-light inline-flex min-h-[2.75rem] items-center justify-center border-cream/35 px-8 text-cream no-underline"
               >
-                Abrir WhatsApp
+                <span>Abrir WhatsApp</span>
               </a>
             </div>
           </div>
