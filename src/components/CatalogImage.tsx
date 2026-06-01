@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Image, { type ImageProps } from "next/image";
 import {
   getRasterFallbackSrc,
@@ -30,6 +30,11 @@ export default function CatalogImage({
   const initial = String(src);
   const [resolvedSrc, setResolvedSrc] = useState(initial);
   const [triedRasterFallback, setTriedRasterFallback] = useState(false);
+
+  useEffect(() => {
+    setResolvedSrc(String(src));
+    setTriedRasterFallback(false);
+  }, [src]);
 
   const directFromR2 =
     unoptimized ?? shouldUnoptimizeImage(resolvedSrc, { triedRasterFallback });
