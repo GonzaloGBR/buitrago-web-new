@@ -135,6 +135,7 @@ export default function ProductDetailClient({
    */
   const displaySizes = useMemo(() => buildDisplaySizes(product), [product]);
   const hasSizes = displaySizes.length > 0;
+  const hasDimensionsText = !hasSizes && product.dimensions && product.dimensions.trim() !== "—" && product.dimensions.trim() !== "";
   
   const [selectedSizeIdState, setSelectedSizeIdState] = useState<number | null>(
     () => displaySizes[0]?.id ?? null
@@ -310,7 +311,7 @@ export default function ProductDetailClient({
               {product.description}
             </p>
 
-            {(hasSizes || woodSpecies.length > 0 || finishOptions.length > 0) ? (
+            {(hasSizes || woodSpecies.length > 0 || finishOptions.length > 0 || hasDimensionsText) ? (
             <div className="mt-6 space-y-5 sm:mt-7">
               {hasSizes ? (
                 <OptionSelectRow
@@ -320,6 +321,11 @@ export default function ProductDetailClient({
                   onChange={setSelectedSizeIdState}
                   options={displaySizes.map((s) => ({ id: s.id, label: s.label }))}
                 />
+              ) : hasDimensionsText ? (
+                <div>
+                  <span className="text-label mb-2 block text-warm-gray">Dimensiones</span>
+                  <div className="font-sans text-[0.9rem] text-charcoal sm:text-[0.95rem]">{product.dimensions}</div>
+                </div>
               ) : null}
               <OptionSelectRow
                 id="product-wood-select"

@@ -98,13 +98,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                   {product.shortDescription}
                 </p>
 
-                <div className="mt-2 flex items-center gap-1.5 font-sans text-[0.68rem] text-charcoal/55 sm:mt-3 sm:text-[0.72rem]">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="shrink-0">
-                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  </svg>
-                  <span className="truncate">{product.dimensions}</span>
-                </div>
-
                 <div
                   className={
                     hasReferencePrice(product.price)
