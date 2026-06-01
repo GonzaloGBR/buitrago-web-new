@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import CatalogPageHeader from "@/components/CatalogPageHeader";
 import CatalogImage from "@/components/CatalogImage";
 import ProductCardImage from "@/components/ProductCardImage";
 import Link from "next/link";
@@ -134,38 +135,30 @@ export default function ProductDetailClient({
    */
   const displaySizes = useMemo(() => buildDisplaySizes(product), [product]);
   const hasSizes = displaySizes.length > 0;
-  const [selectedSizeId, setSelectedSizeId] = useState<number | null>(
+  
+  const [selectedSizeIdState, setSelectedSizeIdState] = useState<number | null>(
     () => displaySizes[0]?.id ?? null
   );
-  const [selectedWoodId, setSelectedWoodId] = useState<number | null>(
+  const selectedSizeId = displaySizes.some((s) => s.id === selectedSizeIdState)
+    ? selectedSizeIdState
+    : (displaySizes[0]?.id ?? null);
+
+  const [selectedWoodIdState, setSelectedWoodIdState] = useState<number | null>(
     () => woodSpecies[0]?.id ?? null
   );
-  const [selectedFinishId, setSelectedFinishId] = useState<number | null>(
+  const selectedWoodId = woodSpecies.some((w) => w.id === selectedWoodIdState)
+    ? selectedWoodIdState
+    : (woodSpecies[0]?.id ?? null);
+
+  const [selectedFinishIdState, setSelectedFinishIdState] = useState<number | null>(
     () => finishOptions[0]?.id ?? null
   );
+  const selectedFinishId = finishOptions.some((f) => f.id === selectedFinishIdState)
+    ? selectedFinishIdState
+    : (finishOptions[0]?.id ?? null);
+
   const selectedSize =
     displaySizes.find((s) => s.id === selectedSizeId) ?? displaySizes[0] ?? null;
-
-  useEffect(() => {
-    setSelectedSizeId((prev) => {
-      if (prev != null && displaySizes.some((s) => s.id === prev)) return prev;
-      return displaySizes[0]?.id ?? null;
-    });
-  }, [displaySizes]);
-
-  useEffect(() => {
-    setSelectedWoodId((prev) => {
-      if (prev != null && woodSpecies.some((w) => w.id === prev)) return prev;
-      return woodSpecies[0]?.id ?? null;
-    });
-  }, [woodSpecies]);
-
-  useEffect(() => {
-    setSelectedFinishId((prev) => {
-      if (prev != null && finishOptions.some((f) => f.id === prev)) return prev;
-      return finishOptions[0]?.id ?? null;
-    });
-  }, [finishOptions]);
 
   const rawReferencePrice = (selectedSize?.price ?? product.price).trim();
   const referencePriceText = hasReferencePrice(rawReferencePrice)
@@ -216,33 +209,21 @@ export default function ProductDetailClient({
 
   return (
     <main className="min-h-screen bg-cream">
-      <div className="section-editorial pt-5 pb-2 sm:pt-6">
-        <Link
-          href={`/categoria/${slug}`}
-          className="inline-flex items-center gap-2 font-sans text-[0.72rem] text-charcoal/60 no-underline transition-colors hover:text-charcoal sm:gap-2.5 sm:text-[0.8rem]"
-        >
-          <span className="flex h-7 w-7 items-center justify-center rounded-full border border-charcoal/15 text-[0.8rem] sm:h-8 sm:w-8 sm:text-[0.85rem]">
-            ‹
-          </span>
-          <span className="truncate">Volver a {category.name}</span>
-        </Link>
-
-        <nav className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 font-sans text-[0.65rem] text-warm-gray sm:text-[0.7rem]">
-          <Link href="/" className="no-underline hover:text-charcoal transition-colors">
-            Inicio
-          </Link>
-          <span>/</span>
-          <Link href="/#categorías" className="no-underline hover:text-charcoal transition-colors">
-            Categorías
-          </Link>
-          <span>/</span>
-          <Link href={`/categoria/${slug}`} className="no-underline hover:text-charcoal transition-colors">{category.name}</Link>
-          <span>/</span>
-          <span className="text-charcoal">{product.name}</span>
-        </nav>
-      </div>
-
       <section className="section-editorial pt-5 pb-12 sm:pt-6 sm:pb-16 md:pb-24">
+        {/* Breadcrumb — arriba de todo, ancho completo */}
+        <div className="mb-5 sm:mb-6">
+          <CatalogPageHeader
+            backHref={`/categoria/${slug}`}
+            backLabel={`Volver a ${category.name}`}
+            breadcrumbs={[
+              { label: "Inicio", href: "/" },
+              { label: "Categorías", href: "/#categorías" },
+              { label: category.name, href: `/categoria/${slug}` },
+              { label: product.name },
+            ]}
+          />
+        </div>
+
         <div className="grid grid-cols-1 items-start gap-8 sm:gap-10 md:grid-cols-[5.5rem_1fr_1fr] md:gap-6 lg:gap-10">
           <div className="hidden flex-col gap-2.5 md:flex">
             {product.gallery.map((src, i) => (
@@ -336,7 +317,7 @@ export default function ProductDetailClient({
                   id="product-size-select"
                   label="Medidas"
                   value={selectedSizeId ?? ""}
-                  onChange={setSelectedSizeId}
+                  onChange={setSelectedSizeIdState}
                   options={displaySizes.map((s) => ({ id: s.id, label: s.label }))}
                 />
               ) : null}
@@ -344,14 +325,14 @@ export default function ProductDetailClient({
                 id="product-wood-select"
                 label="Madera"
                 value={selectedWoodId ?? ""}
-                onChange={setSelectedWoodId}
+                onChange={setSelectedWoodIdState}
                 options={woodSpecies}
               />
               <OptionSelectRow
                 id="product-finish-select"
                 label="Acabado"
                 value={selectedFinishId ?? ""}
-                onChange={setSelectedFinishId}
+                onChange={setSelectedFinishIdState}
                 options={finishOptions}
               />
             </div>

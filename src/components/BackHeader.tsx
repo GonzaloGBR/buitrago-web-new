@@ -16,7 +16,11 @@ export default function BackHeader() {
   const router = useRouter();
 
   const handleBack = () => {
-    if (typeof window !== "undefined" && window.history.length > 1) {
+    const isInternal =
+      typeof document !== "undefined" &&
+      document.referrer.includes(window.location.host);
+
+    if (isInternal && window.history.length > 1) {
       router.back();
       return;
     }
@@ -25,7 +29,7 @@ export default function BackHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-sand/30 bg-cream/95 backdrop-blur-md">
-      <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 md:px-10">
+      <div className="mx-auto flex w-full max-w-[2560px] items-center justify-between gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 md:px-10">
         <Link
           href="/"
           aria-label="Buitrago — inicio"

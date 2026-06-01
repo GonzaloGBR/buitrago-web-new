@@ -375,7 +375,7 @@ export default function Navbar({ siteChromeVisible }: NavbarProps) {
           !siteChromeVisible ? "pointer-events-none invisible" : ""
         } ${navSurface}`}
       >
-        <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-3 px-4 py-3 sm:py-4 md:px-6 md:py-5">
+        <div className="mx-auto flex w-full max-w-[2560px] items-center justify-between gap-3 px-4 py-3 sm:py-4 md:px-6 md:py-5">
           {/* Left — Logo */}
           <Link
             href="/"

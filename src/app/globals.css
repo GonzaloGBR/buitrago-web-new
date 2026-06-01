@@ -57,6 +57,12 @@ body {
   overscroll-behavior-x: none;
 }
 
+/* Fotos de producto: espacio de color coherente entre Safari, Chrome y Firefox. */
+img,
+picture {
+  color-rendering: auto;
+}
+
 /* Touch targets razonables: evita que los botones queden por debajo de 44x44px en táctil. */
 @media (pointer: coarse) {
   button,
@@ -146,7 +152,7 @@ img {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
-  max-width: 1400px;
+  max-width: 2560px;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }

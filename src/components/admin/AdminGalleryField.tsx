@@ -43,16 +43,15 @@ export default function AdminGalleryField({ defaultLines }: Props) {
 
   return (
     <div className="space-y-2">
-      <AdminLabel>Galería — varias fotos del producto</AdminLabel>
+      <AdminLabel>Fotos adicionales (opcional)</AdminLabel>
       <AdminTextarea
         name="gallery"
         rows={6}
-        required
         value={text}
         onChange={(e) => setText(e.target.value)}
         variant="mono"
         textSize="xs"
-        placeholder={"/uploads/foto-1.jpg\n/uploads/foto-2.jpg"}
+        placeholder={"/uploads/foto-2.jpg\n/uploads/foto-3.jpg"}
       />
       <div className="flex flex-wrap items-center gap-2">
         <label className="cursor-pointer rounded-sm border border-charcoal/20 bg-cream px-3 py-2 font-sans text-[0.65rem] font-medium uppercase tracking-[0.1em] text-charcoal hover:bg-cream-dark">
@@ -77,8 +76,8 @@ export default function AdminGalleryField({ defaultLines }: Props) {
         ) : null}
       </div>
       <p className="font-sans text-xs leading-relaxed text-warm-gray">
-        Cada línea es una foto de la galería. Podés subir archivos nuevos o elegir cualquier
-        imagen que ya esté en el sitio.
+        La imagen principal aparece sola en el listado y como primera foto del detalle.
+        Acá solo agregá fotos extra (una URL por línea).
       </p>
 
       <AdminCatalogImagePicker

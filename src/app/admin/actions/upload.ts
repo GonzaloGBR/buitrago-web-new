@@ -4,14 +4,16 @@ import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
 import { assertAdmin } from "@/app/admin/actions/guard";
-import { isR2Enabled, putPublicObject } from "@/lib/r2";
+import { processUploadImage } from "@/lib/process-upload-image";
+import { isR2Enabled, publicUrlForKey, putPublicObject } from "@/lib/r2";
 
-const MIME_EXT: Record<string, string> = {
-  "image/jpeg": ".jpg",
-  "image/png": ".png",
-  "image/webp": ".webp",
-  "image/gif": ".gif",
-};
+const ALLOWED = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/avif",
+]);
 
 export async function uploadProductImage(formData: FormData) {
   await assertAdmin();
@@ -19,21 +21,39 @@ export async function uploadProductImage(formData: FormData) {
   if (!(file instanceof File) || file.size === 0) {
     return { ok: false as const, error: "Selecciona un archivo." };
   }
-  const ext = MIME_EXT[file.type];
-  if (!ext) {
-    return { ok: false as const, error: "Solo JPG, PNG, WebP o GIF." };
+  if (!ALLOWED.has(file.type)) {
+    return {
+      ok: false as const,
+      error: "Solo JPG, PNG, WebP, GIF o AVIF.",
+    };
   }
   if (file.size > 8 * 1024 * 1024) {
     return { ok: false as const, error: "Máximo 8 MB." };
   }
-  const buf = Buffer.from(await file.arrayBuffer());
-  const name = `${randomUUID()}${ext}`;
-  const key = `uploads/${name}`;
+
+  const raw = Buffer.from(await file.arrayBuffer());
+  let processed;
+  try {
+    processed = await processUploadImage(raw);
+  } catch (e) {
+    console.error(e);
+    return {
+      ok: false as const,
+      error: "No se pudo procesar la imagen. Probá con otro archivo.",
+    };
+  }
+
+  const id = randomUUID();
+  const webpKey = `uploads/${id}.webp`;
+  const avifKey = `uploads/${id}.avif`;
 
   if (isR2Enabled()) {
     try {
-      const url = await putPublicObject(key, buf, file.type);
-      return { ok: true as const, url };
+      await putPublicObject(webpKey, processed.primary, processed.primaryMime);
+      if (processed.avif) {
+        await putPublicObject(avifKey, processed.avif, "image/avif");
+      }
+      return { ok: true as const, url: publicUrlForKey(webpKey) };
     } catch (e) {
       console.error(e);
       return { ok: false as const, error: "Error al subir a almacenamiento (R2)." };
@@ -42,6 +62,9 @@ export async function uploadProductImage(formData: FormData) {
 
   const dir = path.join(process.cwd(), "public", "uploads");
   await mkdir(dir, { recursive: true });
-  await writeFile(path.join(dir, name), buf);
-  return { ok: true as const, url: `/uploads/${name}` };
+  await writeFile(path.join(dir, `${id}.webp`), processed.primary);
+  if (processed.avif) {
+    await writeFile(path.join(dir, `${id}.avif`), processed.avif);
+  }
+  return { ok: true as const, url: `/uploads/${id}.webp` };
 }

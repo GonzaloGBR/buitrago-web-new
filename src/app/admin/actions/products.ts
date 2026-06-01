@@ -6,6 +6,15 @@ import { prisma } from "@/lib/prisma";
 import { isValidProductId } from "@/lib/slug";
 import { assertAdmin } from "@/app/admin/actions/guard";
 import { normalizeImageSrc } from "@/lib/image-url";
+import {
+  healTruncatedMainImage,
+  mergeProductGallery,
+} from "@/lib/product-gallery";
+import {
+  PRODUCT_FINISH_STORED,
+  PRODUCT_WOOD_BADGE,
+  PRODUCT_WOOD_STORED,
+} from "@/lib/product-defaults";
 
 function parseFeatures(raw: string): string[] {
   return raw
@@ -75,26 +84,26 @@ export async function createProductAction(
   const categorySlug = String(formData.get("categorySlug") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
   const price = String(formData.get("price") ?? "").trim();
-  const wood = String(formData.get("wood") ?? "").trim();
-  const woodBadge = String(formData.get("woodBadge") ?? "").trim();
   const dimensions = String(formData.get("dimensions") ?? "").trim();
   const shortDescription = String(formData.get("shortDescription") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
-  const finish = String(formData.get("finish") ?? "").trim();
-  const image = normalizeImageSrc(String(formData.get("image") ?? "").trim());
+  const imageRaw = normalizeImageSrc(String(formData.get("image") ?? "").trim());
   const features = parseFeatures(String(formData.get("features") ?? ""));
-  const gallery = parseGallery(String(formData.get("gallery") ?? ""));
+  const galleryExtras = parseGallery(String(formData.get("gallery") ?? ""));
   const sizes = parseSizes(String(formData.get("sizes") ?? ""));
 
   if (!isValidProductId(id)) {
     return { error: "ID inválido (minúsculas, números y guiones)." };
   }
-  if (!categorySlug || !name || !image || gallery.length === 0) {
-    return { error: "Categoría, nombre, imagen principal y al menos una imagen de galería son obligatorios." };
+  if (!categorySlug || !name || !imageRaw) {
+    return { error: "Categoría, nombre e imagen principal son obligatorios." };
   }
   if (features.length === 0) {
     return { error: "Añade al menos una característica (una por línea)." };
   }
+
+  const gallery = mergeProductGallery(imageRaw, galleryExtras);
+  const image = healTruncatedMainImage(imageRaw, gallery);
 
   try {
     await prisma.product.create({
@@ -103,12 +112,12 @@ export async function createProductAction(
         categorySlug,
         name,
         price: price || "—",
-        wood: wood || "—",
-        woodBadge: woodBadge || "—",
+        wood: PRODUCT_WOOD_STORED,
+        woodBadge: PRODUCT_WOOD_BADGE,
         dimensions: dimensions || "—",
         shortDescription: shortDescription || "—",
         description: description || "—",
-        finish: finish || "—",
+        finish: PRODUCT_FINISH_STORED,
         image,
         features,
         gallery,
@@ -134,23 +143,23 @@ export async function updateProductAction(
   const categorySlug = String(formData.get("categorySlug") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
   const price = String(formData.get("price") ?? "").trim();
-  const wood = String(formData.get("wood") ?? "").trim();
-  const woodBadge = String(formData.get("woodBadge") ?? "").trim();
   const dimensions = String(formData.get("dimensions") ?? "").trim();
   const shortDescription = String(formData.get("shortDescription") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
-  const finish = String(formData.get("finish") ?? "").trim();
-  const image = normalizeImageSrc(String(formData.get("image") ?? "").trim());
+  const imageRaw = normalizeImageSrc(String(formData.get("image") ?? "").trim());
   const features = parseFeatures(String(formData.get("features") ?? ""));
-  const gallery = parseGallery(String(formData.get("gallery") ?? ""));
+  const galleryExtras = parseGallery(String(formData.get("gallery") ?? ""));
   const sizes = parseSizes(String(formData.get("sizes") ?? ""));
 
-  if (!categorySlug || !name || !image || gallery.length === 0) {
-    return { error: "Categoría, nombre, imagen y galería son obligatorios." };
+  if (!categorySlug || !name || !imageRaw) {
+    return { error: "Categoría, nombre e imagen principal son obligatorios." };
   }
   if (features.length === 0) {
     return { error: "Añade al menos una característica." };
   }
+
+  const gallery = mergeProductGallery(imageRaw, galleryExtras);
+  const image = healTruncatedMainImage(imageRaw, gallery);
 
   let old: { categorySlug: string } | null = null;
   try {
@@ -172,12 +181,12 @@ export async function updateProductAction(
           categorySlug,
           name,
           price: price || "—",
-          wood: wood || "—",
-          woodBadge: woodBadge || "—",
+          wood: PRODUCT_WOOD_STORED,
+          woodBadge: PRODUCT_WOOD_BADGE,
           dimensions: dimensions || "—",
           shortDescription: shortDescription || "—",
           description: description || "—",
-          finish: finish || "—",
+          finish: PRODUCT_FINISH_STORED,
           image,
           features,
           gallery,

@@ -5,6 +5,15 @@ import type {
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { normalizeGallery, normalizeImageSrc } from "@/lib/image-url";
+import {
+  PRODUCT_FINISH_STORED,
+  PRODUCT_WOOD_BADGE,
+  PRODUCT_WOOD_STORED,
+} from "@/lib/product-defaults";
+import {
+  healTruncatedMainImage,
+  mergeProductGallery,
+} from "@/lib/product-gallery";
 
 export type Category = {
   slug: string;
@@ -70,20 +79,26 @@ function mapProduct(p: DbProductWithSizes): Product {
     .slice()
     .sort((a, b) => a.position - b.position || a.id - b.id)
     .map(mapSize);
+  const rawGallery = normalizeGallery(p.gallery as unknown[]);
+  const image = healTruncatedMainImage(
+    normalizeImageSrc(p.image) || p.image,
+    rawGallery
+  );
+  const gallery = mergeProductGallery(image, rawGallery);
   return {
     id: p.id,
     name: p.name,
     categorySlug: p.categorySlug,
     price: p.price,
-    wood: p.wood,
-    woodBadge: p.woodBadge,
+    wood: PRODUCT_WOOD_STORED,
+    woodBadge: PRODUCT_WOOD_BADGE,
     dimensions: p.dimensions,
     shortDescription: p.shortDescription,
     description: p.description,
-    finish: p.finish,
+    finish: PRODUCT_FINISH_STORED,
     features: Array.isArray(p.features) ? (p.features as string[]) : [],
-    gallery: normalizeGallery(p.gallery as unknown[]),
-    image: normalizeImageSrc(p.image) || p.image,
+    gallery,
+    image,
     sizes,
   };
 }

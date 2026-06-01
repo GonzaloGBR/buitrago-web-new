@@ -1,11 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { uploadProductImage } from "@/app/admin/actions/upload";
+import CatalogImage from "@/components/CatalogImage";
 import { AdminInput, AdminLabel } from "@/components/admin/AdminFormControls";
 import AdminCatalogImagePicker from "@/components/admin/AdminCatalogImagePicker";
-import { shouldUnoptimizeImage } from "@/lib/image-url";
 
 type Props = {
   name: string;
@@ -48,13 +47,12 @@ export default function AdminImageField({
       <input type="hidden" name={name} value={url} />
       {url ? (
         <div className="relative h-28 w-full max-w-xs overflow-hidden rounded-md border border-charcoal/10 bg-charcoal/5">
-          <Image
+          <CatalogImage
             src={url}
             alt="Vista previa"
             fill
             className="object-cover"
             sizes="320px"
-            unoptimized={shouldUnoptimizeImage(url)}
           />
         </div>
       ) : null}

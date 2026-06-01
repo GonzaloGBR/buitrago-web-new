@@ -1,6 +1,9 @@
 import type { CSSProperties } from "react";
 import { r2Asset } from "@/lib/r2-public";
 
+import Image from "next/image";
+import { shouldUnoptimizeImage } from "@/lib/image-url";
+
 /** Logo por defecto en R2 (`logo.png`). */
 const LOGO_SRC = r2Asset("logo.png");
 
@@ -38,7 +41,7 @@ type LogoMarkProps = {
 /**
  * Logo de marca.
  *
- * - URLs remotas (R2, CDN): `<img>` — `mask-image` cross-origin suele no pintar nada por CORS.
+ * - URLs remotas (R2, CDN): `<Image>` — `mask-image` cross-origin suele no pintar nada por CORS.
  * - Rutas locales (`/…`): máscara CSS + color de fondo (silueta tipo “B”).
  */
 export default function LogoMark({ variant, className = "", src = LOGO_SRC }: LogoMarkProps) {
@@ -48,19 +51,18 @@ export default function LogoMark({ variant, className = "", src = LOGO_SRC }: Lo
         className={`relative inline-flex shrink-0 items-center justify-center ${className}`}
         aria-hidden
       >
-        <img
+        <Image
           src={src}
           alt=""
           width={420}
           height={160}
-          className={`max-h-full w-auto max-w-full object-contain object-center [image-rendering:auto] ${
+          className={`max-h-full w-auto max-w-full object-contain object-center ${
             variant === "on-dark"
               ? "brightness-0 invert contrast-105 drop-shadow-[0_0_1px_rgba(0,0,0,0.95)] drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)]"
               : ""
           }`}
-          loading="eager"
-          decoding="async"
-          referrerPolicy="no-referrer"
+          priority
+          unoptimized={shouldUnoptimizeImage(src)}
         />
       </span>
     );

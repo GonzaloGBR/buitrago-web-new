@@ -12,7 +12,7 @@ model Category {
   name        String
   tagline     String
   description String    @db.Text
-  image       String
+  image       String   @db.VarChar(512)
   products    Product[]
 }
 
@@ -28,7 +28,7 @@ model Product {
   shortDescription String   @db.Text
   description      String   @db.Text
   finish           String
-  image            String
+  image            String   @db.VarChar(512)
   features         Json
   gallery          Json
   featuredAs       FeaturedProduct?

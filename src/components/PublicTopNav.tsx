@@ -4,8 +4,8 @@ import LogoMark from "@/components/LogoMark";
 /** Barra superior en páginas públicas fuera de la home (categorías, etc.). */
 export default function PublicTopNav() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-sand/30 bg-cream/95 backdrop-blur-md">
-      <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-3 px-4 py-3 sm:gap-6 sm:px-6 sm:py-4 md:px-10">
+    <nav className="public-top-nav sticky top-0 z-50 border-b border-sand/30 bg-cream/95 backdrop-blur-md [--public-nav-h:4.25rem] sm:[--public-nav-h:5.25rem] md:[--public-nav-h:6rem]">
+      <div className="mx-auto flex w-full max-w-[2560px] items-center justify-between gap-3 px-4 py-3 sm:gap-6 sm:px-6 sm:py-4 md:px-10">
         <Link
           href="/"
           aria-label="Buitrago — inicio"

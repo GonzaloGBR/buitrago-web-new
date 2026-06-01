@@ -89,8 +89,8 @@ export default function CategoriesSection({ categories }: Props) {
         </h2>
       </div>
 
-      <div className="mx-auto w-full max-w-5xl 2xl:max-w-6xl">
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 md:gap-3 lg:grid-cols-3 lg:gap-4">
+      <div className="mx-auto w-full max-w-7xl 2xl:max-w-none">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-2.5 md:gap-3 lg:gap-4">
           {categories.map((cat, i) => (
             <Link
               key={cat.slug}

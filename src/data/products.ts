@@ -1,5 +1,10 @@
 import type { Category, Product } from "./catalog";
 import { r2Asset } from "@/lib/r2-public";
+import {
+  PRODUCT_FINISH_STORED,
+  PRODUCT_WOOD_BADGE,
+  PRODUCT_WOOD_STORED,
+} from "@/lib/product-defaults";
 
 /**
  * Rutas en Cloudflare R2 (`buitrago-media`), alineadas con tus carpetas:
@@ -31,12 +36,12 @@ function seedProduct(
     name,
     categorySlug,
     price: "Consultar",
-    wood: "Maderas nobles a elección",
-    woodBadge: "Madera maciza",
+    wood: PRODUCT_WOOD_STORED,
+    woodBadge: PRODUCT_WOOD_BADGE,
     dimensions: "Medidas a medida",
     shortDescription: `${name}. Pieza artesanal Buitrago en madera maciza, Salta.`,
     description: `${name}, fabricado en nuestro taller. Trabajamos maderas nobles con ensambles tradicionales y acabados naturales o lacados según tu proyecto. Asesoramos medidas, madera y terminación para que la pieza encaje en tu espacio.`,
-    finish: "Aceite natural, laca o cera — a elección",
+    finish: PRODUCT_FINISH_STORED,
     features: [
       "Madera maciza",
       "Diseño y fabricación artesanal",

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import CatalogPageHeader from "@/components/CatalogPageHeader";
 import CatalogImage from "@/components/CatalogImage";
 import ProductCardImage from "@/components/ProductCardImage";
 import Link from "next/link";
@@ -26,35 +27,23 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   return (
     <main className="min-h-screen bg-cream">
-      {/* ── Back + Breadcrumb ── */}
-      <div className="section-editorial pt-5 pb-2 sm:pt-6">
-        <Link
-          href="/#categorías"
-          className="inline-flex items-center gap-2 font-sans text-[0.72rem] text-charcoal/60 no-underline transition-colors hover:text-charcoal sm:gap-2.5 sm:text-[0.8rem]"
-        >
-          <span className="flex h-7 w-7 items-center justify-center rounded-full border border-charcoal/15 text-[0.8rem] sm:h-8 sm:w-8 sm:text-[0.85rem]">
-            ‹
-          </span>
-          Volver al inicio
-        </Link>
-
-        <nav className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 font-sans text-[0.65rem] text-warm-gray sm:text-[0.7rem]">
-          <Link href="/" className="no-underline hover:text-charcoal transition-colors">
-            Inicio
-          </Link>
-          <span>/</span>
-          <Link href="/#categorías" className="no-underline hover:text-charcoal transition-colors">
-            Categorías
-          </Link>
-          <span>/</span>
-          <span className="text-charcoal">{category.name}</span>
-        </nav>
-      </div>
-
       {/* ── Hero split: info left + image right ── */}
       <section className="section-editorial pb-12 pt-5 sm:pb-16 sm:pt-6 md:pb-24 md:pt-8">
-        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16">
+        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 md:gap-16 lg:gap-20 xl:gap-24 2xl:gap-32">
           <div>
+            {/* Breadcrumb — integrado en el espacio superior izquierdo */}
+            <div className="mb-16 sm:mb-22">
+              <CatalogPageHeader
+                backHref="/#categorías"
+                backLabel="Volver al inicio"
+                breadcrumbs={[
+                  { label: "Inicio", href: "/" },
+                  { label: "Categorías", href: "/#categorías" },
+                  { label: category.name },
+                ]}
+              />
+            </div>
+
             <div className="mb-4 flex items-center gap-3">
               <span className="h-[1px] w-6 bg-charcoal/30" />
               <span className="text-label text-warm-gray">Catálogo</span>
@@ -62,11 +51,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <h1 className="heading-display text-[clamp(2.25rem,7vw,5rem)] text-charcoal">
               {category.name}
             </h1>
-            <p className="text-body-elegant mt-4 max-w-md text-sm text-warm-gray sm:text-base">
+            <p className="text-body-elegant mt-4 max-w-md text-sm text-warm-gray sm:text-base xl:max-w-lg 2xl:max-w-xl xl:text-lg">
               {category.tagline}
             </p>
           </div>
-          <div className="relative mx-auto aspect-[4/3] w-full max-w-xs overflow-hidden rounded-sm bg-cream-dark sm:max-w-sm md:mx-0 md:max-w-md lg:max-w-lg">
+          <div className="relative mx-auto hidden aspect-[4/3] w-full max-w-xs overflow-hidden rounded-sm bg-cream-dark sm:max-w-sm md:ml-auto md:mr-0 md:block md:max-w-md lg:max-w-none lg:w-[95%] xl:w-[90%] 2xl:w-[85%]">
             <CatalogImage
               src={category.image}
               alt={category.name}
@@ -81,7 +70,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
       {/* ── Product grid ── */}
       <section className="section-editorial pb-20 md:pb-36">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-8 md:grid-cols-3 md:gap-10">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-2 sm:gap-8 md:grid-cols-3 md:gap-10 lg:gap-12 xl:gap-14 2xl:gap-16">
           {items.map((product) => (
             <Link
               key={product.id}

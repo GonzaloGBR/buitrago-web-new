@@ -1,15 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import {
-  isLowEndDevice,
-  isMobileViewport,
+  isTouchMobileViewport,
   prefersReducedMotion,
 } from "@/lib/device-capabilities";
 import { getMoodboardItems, type MoodboardItem } from "@/lib/moodboard-collage";
-import { shouldUnoptimizeImage } from "@/lib/image-url";
+import CatalogImage from "@/components/CatalogImage";
 
 export type { MoodboardItem };
 export { getMoodboardItems } from "@/lib/moodboard-collage";
@@ -18,9 +16,10 @@ const CARD_STAGGER_DESKTOP = 0.38;
 const CARD_DURATION_DESKTOP = 1.12;
 const SLIDE_UP_DURATION_DESKTOP = 1;
 
-const CARD_STAGGER_MOBILE = 0.24;
-const CARD_DURATION_MOBILE = 0.8;
-const SLIDE_UP_DURATION_MOBILE = 0.75;
+/** Móvil touch: un poco más ágil, pero cercano al desktop (evita sensación “a cámara rápida”). */
+const CARD_STAGGER_MOBILE = 0.32;
+const CARD_DURATION_MOBILE = 1;
+const SLIDE_UP_DURATION_MOBILE = 0.9;
 
 type Props = {
   startAnimation: boolean;
@@ -45,13 +44,17 @@ export default function MoodboardOverlay({
 
   const onRevealStartRef = useRef(onRevealStart);
   const onCompleteRef = useRef(onComplete);
-  onRevealStartRef.current = onRevealStart;
-  onCompleteRef.current = onComplete;
+  
+  useEffect(() => {
+    onRevealStartRef.current = onRevealStart;
+    onCompleteRef.current = onComplete;
+  });
 
   const collageKey = collageImageSrcs.join("\0");
 
   const items = useMemo(
     () => getMoodboardItems(heroImageSrc, collageImageSrcs),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [heroImageSrc, collageKey]
   );
 
@@ -80,7 +83,7 @@ export default function MoodboardOverlay({
       return;
     }
 
-    const mobile = isMobileViewport() || isLowEndDevice();
+    const mobile = isTouchMobileViewport();
     const stagger = mobile ? CARD_STAGGER_MOBILE : CARD_STAGGER_DESKTOP;
     const cardDuration = mobile ? CARD_DURATION_MOBILE : CARD_DURATION_DESKTOP;
     const slideDuration = mobile ? SLIDE_UP_DURATION_MOBILE : SLIDE_UP_DURATION_DESKTOP;
@@ -161,6 +164,7 @@ export default function MoodboardOverlay({
         tl.kill();
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [startAnimation, heroImageSrc, collageKey]);
 
   return (
@@ -185,12 +189,11 @@ export default function MoodboardOverlay({
               willChange: "transform, opacity",
             }}
           >
-            <Image
+            <CatalogImage
               src={item.src}
               alt={item.alt}
               fill
               className="object-cover"
-              unoptimized={shouldUnoptimizeImage(item.src)}
               sizes="(max-width: 768px) 28vw, 22vw"
               priority
               loading="eager"

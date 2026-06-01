@@ -40,7 +40,7 @@ export default function AdminCatalogImagePicker({
 
   useEffect(() => {
     if (!open) return;
-    setQuery("");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void load();
   }, [open, load]);
 

@@ -60,8 +60,26 @@ export function isLowEndDevice(): boolean {
   return false;
 }
 
-/** True si el viewport es "móvil" (< 768px). Útil para aplicar timings más ágiles. */
+/** True si el viewport es estrecho (< 768px). */
 export function isMobileViewport(): boolean {
   if (typeof window === "undefined") return false;
   return window.innerWidth < 768;
+}
+
+/**
+ * Móvil real (touch), no solo ventana angosta.
+ * Evita que el preview de Cursor, DevTools docked o ventanas estrechas en PC
+ * disparen animaciones "rápidas" pensadas para celular.
+ */
+export function isTouchMobileViewport(): boolean {
+  if (typeof window === "undefined") return false;
+  const narrow =
+    window.matchMedia?.("(max-width: 767px)").matches ?? window.innerWidth < 768;
+  const coarse = window.matchMedia?.("(pointer: coarse)").matches ?? false;
+  return narrow && coarse;
+}
+
+/** Solo para acortar precarga en redes/dispositivos limitados — no acelera GSAP. */
+export function shouldShortenIntroPreload(): boolean {
+  return isTouchMobileViewport() || isLowEndDevice();
 }

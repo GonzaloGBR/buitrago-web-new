@@ -5,9 +5,8 @@ import gsap from "gsap";
 import LogoMark from "@/components/LogoMark";
 import { getMoodboardItems } from "@/lib/moodboard-collage";
 import {
-  isLowEndDevice,
-  isMobileViewport,
   prefersReducedMotion,
+  shouldShortenIntroPreload,
 } from "@/lib/device-capabilities";
 import { r2Asset } from "@/lib/r2-public";
 
@@ -113,18 +112,11 @@ export default function IntroOverlay({
       return;
     }
 
-    const mobile = isMobileViewport();
-    const lowEnd = isLowEndDevice();
+    const shortenPreload = shouldShortenIntroPreload();
 
-    /**
-     * Ritmo del contador:
-     *  - Desktop fluido: ~1.5 u/frame (sensación suave).
-     *  - Móvil / low-end: subimos el paso para que no "se quede" visual.
-     * También bajamos el hard-cap en móvil (3.5s vs 5s) para no castigar con intros largas
-     * en redes lentas: preferible perder un poco de precarga y arrancar antes.
-     */
-    const counterStep = mobile || lowEnd ? 3.2 : 1.8;
-    const hardCapMs = mobile || lowEnd ? 3500 : 5000;
+    /** Mismo ritmo visual en PC, Cursor y móvil; solo acortamos el tope de precarga si hace falta. */
+    const counterStep = 1.8;
+    const hardCapMs = shortenPreload ? 4000 : 5000;
 
     gsap.set(logo, { opacity: 0, y: 12 });
     gsap.to(logo, { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.1 });
@@ -144,8 +136,7 @@ export default function IntroOverlay({
       targetPct = pct;
     }, hardCapMs).then(() => {
       targetPct = 100;
-      // Poll más rápido en móvil para cerrar el overlay cuanto antes.
-      const pollMs = mobile || lowEnd ? 30 : 50;
+      const pollMs = 50;
       const waitForDisplay = setInterval(() => {
         if (displayPct.current >= 99) {
           clearInterval(waitForDisplay);
@@ -164,13 +155,11 @@ export default function IntroOverlay({
     const overlay = overlayRef.current;
     if (!overlay) return;
 
-    /** Fade out final. En móvil lo acortamos un pelín para pasar rápido al moodboard. */
-    const mobile = isMobileViewport();
     gsap.to(overlay, {
       opacity: 0,
-      duration: mobile ? 0.55 : 0.8,
+      duration: 0.8,
       ease: "power2.inOut",
-      delay: mobile ? 0.15 : 0.3,
+      delay: 0.3,
       onComplete,
     });
   }, [loadDone, onComplete]);

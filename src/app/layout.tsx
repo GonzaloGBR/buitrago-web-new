@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter, Cormorant } from "next/font/google";
-import SmoothScroll from "@/components/SmoothScroll";
 import { HOME_ENTRANCE_GUARD_SCRIPT } from "@/lib/home-entrance-guard-script";
 import "./globals.css";
 
@@ -57,9 +56,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: HOME_ENTRANCE_GUARD_SCRIPT }}
         />
       </head>
-      <body>
-        <SmoothScroll>{children}</SmoothScroll>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

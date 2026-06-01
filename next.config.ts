@@ -4,7 +4,8 @@ const nextConfig: NextConfig = {
   devIndicators: false,
   poweredByHeader: false,
   images: {
-    formats: ["image/avif", "image/webp"],
+    /** WebP primero: mejor respaldo en navegadores sin AVIF nativo. */
+    formats: ["image/webp", "image/avif"],
     qualities: [70, 75, 90],
     remotePatterns: [
       { protocol: "https", hostname: "buitrago.shop", pathname: "/**" },

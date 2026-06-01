@@ -36,14 +36,7 @@ type Props = {
 export default function HomeClient({ categories, featured, siteContent }: Props) {
   const moodboardCollage = useMemo(
     () => getMoodboardCollageUrls(siteContent),
-    [
-      siteContent.homeHeroImage,
-      siteContent.moodboardCollage1,
-      siteContent.moodboardCollage2,
-      siteContent.moodboardCollage3,
-      siteContent.moodboardCollage4,
-      siteContent.moodboardCollage5,
-    ]
+    [siteContent]
   );
   /**
    * SSR y el PRIMER render del cliente deben producir el mismo HTML — de lo contrario React

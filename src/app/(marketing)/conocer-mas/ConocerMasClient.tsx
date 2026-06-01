@@ -1,11 +1,10 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { shouldUnoptimizeImage } from "@/lib/image-url";
+import CatalogImage from "@/components/CatalogImage";
 import type { SiteContentValues } from "@/lib/site-content-defaults";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -65,34 +64,6 @@ const MADERAS = [
   { nombre: "Quina colorada", tono: "Rojo profundo", uso: "Escritorios y detalles de autor" },
   { nombre: "Pino paranaense", tono: "Claro uniforme", uso: "Estructuras y complementos" },
 ];
-
-/** Fotos editoriales con `next/image` (fill + sizes + calidad). */
-function EditorialPhoto({
-  src,
-  alt,
-  sizes,
-  className = "object-cover",
-  priority = false,
-}: {
-  src: string;
-  alt: string;
-  sizes: string;
-  className?: string;
-  priority?: boolean;
-}) {
-  return (
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      priority={priority}
-      quality={90}
-      sizes={sizes}
-      unoptimized={shouldUnoptimizeImage(src)}
-      className={className}
-    />
-  );
-}
 
 export default function ConocerMasClient({ images }: { images: ConocerMasImages }) {
   const heroRef = useRef<HTMLElement>(null);
@@ -236,11 +207,13 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
         <div className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-1/2 h-[188%] w-[188%] origin-center -translate-x-1/2 -translate-y-1/2 scale-[0.52] sm:h-[156%] sm:w-[156%] sm:scale-[0.64] md:h-[139%] md:w-[139%] md:scale-[0.72]">
             <div className="relative h-full w-full">
-              <EditorialPhoto
+              <CatalogImage
                 src={images.conocerMasHeroImage}
                 alt="Cajonera de madera noble Buitrago en ambiente de interior"
+                fill
                 sizes="100vw"
                 priority
+                quality={90}
                 className="object-cover object-[34%_84%] brightness-[1.02] saturate-[1.04] sm:object-[50%_80%] md:object-[50%_78%]"
               />
             </div>
@@ -292,9 +265,10 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
         <div className="grid grid-cols-1 gap-10 md:grid-cols-[1fr_1.1fr] md:gap-16 lg:gap-24">
           <div className="story-reveal order-2 opacity-0 md:order-1">
             <div className="relative aspect-[4/5] overflow-hidden bg-cream-dark">
-              <EditorialPhoto
+              <CatalogImage
                 src={images.conocerMasStoryImage}
                 alt="Detalle de ensamblaje — unión a cola de milano"
+                fill
                 sizes="(max-width: 768px) 100vw, 45vw"
                 className="object-cover transition-transform duration-[2.2s] ease-[cubic-bezier(0.19,1,0.22,1)] hover:scale-[1.03]"
               />
@@ -405,9 +379,10 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
             </p>
 
             <div className="relative mt-10 aspect-[4/5] w-full max-w-md overflow-hidden bg-cream-dark sm:mt-12">
-              <EditorialPhoto
+              <CatalogImage
                 src={images.conocerMasProcesoImage}
                 alt="Taller Buitrago en actividad"
+                fill
                 sizes="(max-width: 768px) 100vw, 40vw"
               />
             </div>
@@ -569,10 +544,12 @@ export default function ConocerMasClient({ images }: { images: ConocerMasImages 
       <section className="relative overflow-hidden bg-charcoal text-cream">
         <div className="pointer-events-none absolute inset-0 opacity-20">
           <div className="relative h-full w-full">
-            <EditorialPhoto
+            <CatalogImage
               src={images.conocerMasCtaImage}
               alt=""
+              fill
               sizes="100vw"
+              quality={90}
               className="object-cover"
             />
           </div>

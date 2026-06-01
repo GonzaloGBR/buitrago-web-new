@@ -18,6 +18,7 @@ import {
   AdminTextarea,
 } from "@/components/admin/AdminFormControls";
 import type { Category, Product } from "@/data/catalog";
+import { galleryExtrasForAdmin } from "@/lib/product-gallery";
 
 type Props =
   | { mode: "create"; categories: Category[]; defaultCategorySlug?: string }
@@ -32,8 +33,6 @@ export default function ProductForm(props: Props) {
   const searchParams = useSearchParams();
   const ok = searchParams.get("ok");
   const initial = props.mode === "edit" ? props.initial : null;
-  const defaultCategorySlug =
-    props.mode === "create" ? props.defaultCategorySlug : undefined;
 
   const [state, formAction] = useActionState(
     getProductFormAction(props),
@@ -118,15 +117,6 @@ export default function ProductForm(props: Props) {
 
       <ProductSizesField defaultSizes={initial?.sizes} />
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <AdminField label="Madera">
-          <AdminInput name="wood" defaultValue={initial?.wood} />
-        </AdminField>
-        <AdminField label="Badge madera">
-          <AdminInput name="woodBadge" defaultValue={initial?.woodBadge} />
-        </AdminField>
-      </div>
-
       <AdminField label="Descripción corta">
         <AdminTextarea
           name="shortDescription"
@@ -143,10 +133,6 @@ export default function ProductForm(props: Props) {
         />
       </AdminField>
 
-      <AdminField label="Acabado">
-        <AdminInput name="finish" defaultValue={initial?.finish} />
-      </AdminField>
-
       <AdminImageField
         name="image"
         label="Imagen principal"
@@ -154,7 +140,13 @@ export default function ProductForm(props: Props) {
         required
       />
 
-      <AdminGalleryField defaultLines={initial?.gallery ?? []} />
+      <AdminGalleryField
+        defaultLines={
+          initial
+            ? galleryExtrasForAdmin(initial.image, initial.gallery)
+            : []
+        }
+      />
 
       <AdminField label="Características — una por línea">
         <AdminTextarea

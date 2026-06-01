@@ -1,10 +1,9 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { shouldUnoptimizeImage } from "@/lib/image-url";
+import CatalogImage from "@/components/CatalogImage";
 import { prefersReducedMotion } from "@/lib/device-capabilities";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -255,14 +254,13 @@ export default function Hero({ animateIn, onHeroReady, heroImageSrc }: HeroProps
               ref={heroScaleRef}
               className="relative h-full w-full origin-center scale-[1.12] will-change-transform"
             >
-              <Image
+              <CatalogImage
                 src={heroImageSrc}
                 alt="Ambiente con madera noble y diseño de interiores"
                 fill
                 priority
                 quality={90}
                 sizes="100vw"
-                unoptimized={shouldUnoptimizeImage(heroImageSrc)}
                 className="object-cover object-center brightness-[0.94] md:object-[50%_42%]"
               />
             </div>
@@ -271,9 +269,13 @@ export default function Hero({ animateIn, onHeroReady, heroImageSrc }: HeroProps
 
         <div
           ref={overlayRef}
-          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(22,20,18,0.52)_0%,rgba(22,20,18,0.14)_28%,rgba(22,20,18,0.055)_45%,transparent_58%)]"
+          className="pointer-events-none absolute inset-0"
           style={{ opacity: 0 }}
-        />
+          aria-hidden
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(22,20,18,0.58)_0%,rgba(22,20,18,0.32)_38%,rgba(22,20,18,0.22)_52%,rgba(22,20,18,0.08)_68%,transparent_82%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_85%_55%_at_50%_44%,rgba(22,20,18,0.62)_0%,rgba(22,20,18,0.28)_45%,transparent_72%)]" />
+        </div>
       </div>
 
       <div
@@ -292,7 +294,7 @@ export default function Hero({ animateIn, onHeroReady, heroImageSrc }: HeroProps
             </h1>
           </div>
           <div ref={titleLine2Ref} className="overflow-hidden pt-4 md:pt-5">
-            <p className="flex flex-wrap items-baseline justify-center gap-x-[0.45em] gap-y-1 text-[clamp(1.05rem,2.75vw,2rem)] font-light leading-[1.45] tracking-[0.06em] text-cream/52 italic [font-family:var(--font-hero)]">
+            <p className="flex flex-wrap items-baseline justify-center gap-x-[0.45em] gap-y-1 text-[clamp(1.05rem,2.75vw,2rem)] font-light leading-[1.45] tracking-[0.06em] text-cream/72 italic [font-family:var(--font-hero)] [text-shadow:0_1px_14px_rgba(22,20,18,0.5),0_0_28px_rgba(22,20,18,0.22)]">
               {TITLE_WORDS_2.map((word, i) => (
                 <span key={i} className="hero-word inline-block whitespace-nowrap" style={{ opacity: 0 }}>
                   {word}
