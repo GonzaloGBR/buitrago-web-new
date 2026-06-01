@@ -40,6 +40,8 @@ export const viewport: Viewport = {
   ],
 };
 
+import NavigationTracker from "@/components/NavigationTracker";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -56,7 +58,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: HOME_ENTRANCE_GUARD_SCRIPT }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <NavigationTracker />
+        {children}
+      </body>
     </html>
   );
 }

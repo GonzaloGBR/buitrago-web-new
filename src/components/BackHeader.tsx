@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { hasNavigated } from "@/lib/history-tracker";
 import Link from "next/link";
 import LogoMark from "@/components/LogoMark";
 
@@ -16,11 +17,7 @@ export default function BackHeader() {
   const router = useRouter();
 
   const handleBack = () => {
-    const isInternal =
-      typeof document !== "undefined" &&
-      document.referrer.includes(window.location.host);
-
-    if (isInternal && window.history.length > 1) {
+    if (hasNavigated && window.history.length > 1) {
       router.back();
       return;
     }

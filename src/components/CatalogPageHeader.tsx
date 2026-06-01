@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { hasNavigated } from "@/lib/history-tracker";
 
 export type CatalogBreadcrumbItem = {
   label: string;
@@ -30,11 +31,7 @@ export default function CatalogPageHeader({
 
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
-    const isInternal =
-      typeof document !== "undefined" &&
-      document.referrer.includes(window.location.host);
-
-    if (isInternal && window.history.length > 1) {
+    if (hasNavigated && window.history.length > 1) {
       router.back();
     } else {
       if (backHref.includes("#")) {
