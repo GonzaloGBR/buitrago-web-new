@@ -54,7 +54,6 @@ export default function Footer() {
                 aria-label="Buitrago — inicio"
               >
                 <LogoMark variant="on-dark" className="h-10 w-auto sm:h-11" />
-                <span className="hidden heading-editorial text-xl text-cream sm:block sm:text-2xl">Buitrago</span>
               </Link>
 
               {/* Mobile social icons */}
