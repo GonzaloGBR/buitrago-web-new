@@ -57,6 +57,24 @@ function OptionSelectRow({
   );
 }
 
+function CustomSizeMessage() {
+  return (
+    <div className="mt-7 flex items-start gap-3.5 rounded-sm border border-gold/20 bg-gold/5 p-4 sm:p-5">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mt-0.5 shrink-0 text-gold">
+        <path d="M12 2l2.4 7.6 7.6 2.4-7.6 2.4L12 22l-2.4-7.6-7.6-2.4 7.6-2.4z" />
+      </svg>
+      <div className="flex flex-col gap-1">
+        <span className="font-sans text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-charcoal/90">
+          Fabricación a medida
+        </span>
+        <p className="font-sans text-[0.82rem] leading-relaxed text-charcoal/80">
+          ¿Necesitas otras dimensiones? Adaptamos este diseño para que se ajuste perfectamente a tu espacio. Consúltanos.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 type Props = {
   slug: string;
   product: Product;
@@ -327,9 +345,6 @@ export default function ProductDetailClient({
                       * El alto estándar de la mesa es de 78 cm.
                     </p>
                   )}
-                  <p className="mt-1.5 font-sans text-[0.72rem] text-warm-gray">
-                    * ¿Necesitas otra medida? Fabricamos a pedido para adaptar el diseño a tu espacio.
-                  </p>
                 </div>
               ) : hasDimensionsText ? (
                 <div className="rounded-sm border border-charcoal/10 bg-white/60 p-4 sm:p-5">
@@ -356,11 +371,6 @@ export default function ProductDetailClient({
                       </>
                     )}
                   </div>
-                  <div className="mt-4 border-t border-charcoal/5 pt-3">
-                    <p className="font-sans text-[0.72rem] text-warm-gray">
-                      * ¿Necesitas otra medida? Fabricamos a pedido para adaptar el diseño perfectamente a tu espacio.
-                    </p>
-                  </div>
                 </div>
               ) : null}
               <OptionSelectRow
@@ -379,6 +389,8 @@ export default function ProductDetailClient({
               />
             </div>
             ) : null}
+
+            <CustomSizeMessage />
 
             <div className="mt-6">
               <span className="text-label mb-4 block text-warm-gray">Características destacadas</span>
