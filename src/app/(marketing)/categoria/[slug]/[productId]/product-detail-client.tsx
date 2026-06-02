@@ -376,7 +376,7 @@ export default function ProductDetailClient({
                 </div>
               ) : null}
 
-              <CustomSizeMessage hasDimensions={hasSizes || hasDimensionsText} />
+              <CustomSizeMessage hasDimensions={!!(hasSizes || hasDimensionsText)} />
 
               <OptionSelectRow
                 id="product-wood-select"
