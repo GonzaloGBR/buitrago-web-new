@@ -323,10 +323,13 @@ export default function ProductDetailClient({
                     options={displaySizes.map((s) => ({ id: s.id, label: s.label }))}
                   />
                   {category.slug.includes("mesa") && (
-                    <p className="mt-2 font-sans text-[0.7rem] text-warm-gray">
+                    <p className="mt-2 font-sans text-[0.72rem] text-warm-gray">
                       * El alto estándar de la mesa es de 78 cm.
                     </p>
                   )}
+                  <p className="mt-1.5 font-sans text-[0.72rem] text-warm-gray">
+                    * ¿Necesitas otra medida? Fabricamos a pedido para adaptar el diseño a tu espacio.
+                  </p>
                 </div>
               ) : hasDimensionsText ? (
                 <div className="rounded-sm border border-charcoal/10 bg-white/60 p-4 sm:p-5">
@@ -352,6 +355,11 @@ export default function ProductDetailClient({
                         </div>
                       </>
                     )}
+                  </div>
+                  <div className="mt-4 border-t border-charcoal/5 pt-3">
+                    <p className="font-sans text-[0.72rem] text-warm-gray">
+                      * ¿Necesitas otra medida? Fabricamos a pedido para adaptar el diseño perfectamente a tu espacio.
+                    </p>
                   </div>
                 </div>
               ) : null}
