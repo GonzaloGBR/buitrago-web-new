@@ -59,7 +59,7 @@ function OptionSelectRow({
 
 function CustomSizeMessage() {
   return (
-    <div className="mt-7 flex items-start gap-3.5 rounded-sm border border-gold/20 bg-gold/5 p-4 sm:p-5">
+    <div className="flex items-start gap-3.5 rounded-sm border border-gold/20 bg-gold/5 p-4 sm:p-5">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mt-0.5 shrink-0 text-gold">
         <path d="M12 2l2.4 7.6 7.6 2.4-7.6 2.4L12 22l-2.4-7.6-7.6-2.4 7.6-2.4z" />
       </svg>
@@ -373,6 +373,9 @@ export default function ProductDetailClient({
                   </div>
                 </div>
               ) : null}
+
+              <CustomSizeMessage />
+
               <OptionSelectRow
                 id="product-wood-select"
                 label="Madera"
@@ -389,8 +392,6 @@ export default function ProductDetailClient({
               />
             </div>
             ) : null}
-
-            <CustomSizeMessage />
 
             <div className="mt-6">
               <span className="text-label mb-4 block text-warm-gray">Características destacadas</span>
