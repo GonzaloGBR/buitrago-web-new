@@ -10,7 +10,7 @@ export default function ProductCardImage({ className = "", ...props }: Props) {
       {...props}
       fill
       quality={90}
-      className={`object-contain object-center ${className}`.trim()}
+      className={`object-cover object-center ${className}`.trim()}
     />
   );
 }
