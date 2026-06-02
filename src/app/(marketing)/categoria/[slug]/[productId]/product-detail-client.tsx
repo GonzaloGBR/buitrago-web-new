@@ -57,7 +57,7 @@ function OptionSelectRow({
   );
 }
 
-function CustomSizeMessage() {
+function CustomSizeMessage({ hasDimensions }: { hasDimensions: boolean }) {
   return (
     <div className="flex items-start gap-3.5 rounded-sm border border-gold/20 bg-gold/5 p-4 sm:p-5">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="mt-0.5 shrink-0 text-gold">
@@ -68,7 +68,9 @@ function CustomSizeMessage() {
           Fabricación a medida
         </span>
         <p className="font-sans text-[0.82rem] leading-relaxed text-charcoal/80">
-          ¿Necesitas otras dimensiones? Adaptamos este diseño para que se ajuste perfectamente a tu espacio. Consúltanos.
+          {hasDimensions 
+            ? "¿Necesitas otras dimensiones? Adaptamos este diseño para que se ajuste perfectamente a tu espacio. Consúltanos."
+            : "Fabricamos cada pieza a pedido. Consúltanos para adaptar este diseño a las dimensiones exactas de tu espacio."}
         </p>
       </div>
     </div>
@@ -374,7 +376,7 @@ export default function ProductDetailClient({
                 </div>
               ) : null}
 
-              <CustomSizeMessage />
+              <CustomSizeMessage hasDimensions={hasSizes || hasDimensionsText} />
 
               <OptionSelectRow
                 id="product-wood-select"
