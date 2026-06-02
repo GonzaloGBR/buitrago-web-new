@@ -314,17 +314,45 @@ export default function ProductDetailClient({
             {(hasSizes || woodSpecies.length > 0 || finishOptions.length > 0 || hasDimensionsText) ? (
             <div className="mt-6 space-y-5 sm:mt-7">
               {hasSizes ? (
-                <OptionSelectRow
-                  id="product-size-select"
-                  label="Medidas"
-                  value={selectedSizeId ?? ""}
-                  onChange={setSelectedSizeIdState}
-                  options={displaySizes.map((s) => ({ id: s.id, label: s.label }))}
-                />
-              ) : hasDimensionsText ? (
                 <div>
-                  <span className="text-label mb-2 block text-warm-gray">Dimensiones</span>
-                  <div className="font-sans text-[0.9rem] text-charcoal sm:text-[0.95rem]">{product.dimensions}</div>
+                  <OptionSelectRow
+                    id="product-size-select"
+                    label={category.slug.includes("mesa") ? "Medida de la tapa (en cm)" : "Medidas (en cm)"}
+                    value={selectedSizeId ?? ""}
+                    onChange={setSelectedSizeIdState}
+                    options={displaySizes.map((s) => ({ id: s.id, label: s.label }))}
+                  />
+                  {category.slug.includes("mesa") && (
+                    <p className="mt-2 font-sans text-[0.7rem] text-warm-gray">
+                      * El alto estándar de la mesa es de 78 cm.
+                    </p>
+                  )}
+                </div>
+              ) : hasDimensionsText ? (
+                <div className="rounded-sm border border-charcoal/10 bg-white/60 p-4 sm:p-5">
+                  <span className="text-label mb-3 block text-warm-gray">Medidas (en centímetros)</span>
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="font-sans text-[0.65rem] uppercase tracking-widest text-charcoal/50">
+                        {category.slug.includes("mesa") ? "Tapa de la mesa" : "Dimensiones"}
+                      </span>
+                      <span className="font-sans text-[0.95rem] text-charcoal">
+                        {product.dimensions} <span className="text-charcoal/50 text-[0.8rem]">cm</span>
+                      </span>
+                    </div>
+
+                    {category.slug.includes("mesa") && !product.dimensions.includes("78") && (
+                      <>
+                        <div className="hidden h-8 w-px bg-charcoal/10 sm:block" />
+                        <div className="flex flex-col gap-1">
+                          <span className="font-sans text-[0.65rem] uppercase tracking-widest text-charcoal/50">Alto estándar</span>
+                          <span className="font-sans text-[0.95rem] text-charcoal">
+                            78 <span className="text-charcoal/50 text-[0.8rem]">cm</span>
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               ) : null}
               <OptionSelectRow
