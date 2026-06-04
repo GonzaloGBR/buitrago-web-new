@@ -25,6 +25,7 @@ model Product {
   wood             String
   woodBadge        String
   dimensions       String
+  height           String?
   shortDescription String   @db.Text
   description      String   @db.Text
   finish           String

@@ -39,6 +39,7 @@ function seedProduct(
     wood: PRODUCT_WOOD_STORED,
     woodBadge: PRODUCT_WOOD_BADGE,
     dimensions: "Medidas a medida",
+    height: null,
     shortDescription: `${name}. Pieza artesanal Buitrago en madera maciza, Salta.`,
     description: `${name}, fabricado en nuestro taller. Trabajamos maderas nobles con ensambles tradicionales y acabados naturales o lacados según tu proyecto. Asesoramos medidas, madera y terminación para que la pieza encaje en tu espacio.`,
     finish: PRODUCT_FINISH_STORED,

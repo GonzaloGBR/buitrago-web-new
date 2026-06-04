@@ -9,10 +9,8 @@ async function main() {
   await prisma.woodSpecies.createMany({
     data: [
       { slug: "cedro", label: "Cedro", position: 0 },
-      { slug: "roble", label: "Roble", position: 1 },
-      { slug: "nogal", label: "Nogal", position: 2 },
-      { slug: "quina", label: "Quina", position: 3 },
-      { slug: "petiribi", label: "Petiribí", position: 4 },
+      { slug: "petiribi", label: "Petiribí", position: 1 },
+      { slug: "pino", label: "Pino", position: 2 },
     ],
   });
   await prisma.finishOption.createMany({

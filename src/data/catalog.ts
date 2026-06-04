@@ -39,6 +39,7 @@ export type Product = {
   wood: string;
   woodBadge: string;
   dimensions: string;
+  height: string | null;
   shortDescription: string;
   description: string;
   finish: string;
@@ -93,6 +94,7 @@ function mapProduct(p: DbProductWithSizes): Product {
     wood: PRODUCT_WOOD_STORED,
     woodBadge: PRODUCT_WOOD_BADGE,
     dimensions: p.dimensions,
+    height: p.height,
     shortDescription: p.shortDescription,
     description: p.description,
     finish: PRODUCT_FINISH_STORED,

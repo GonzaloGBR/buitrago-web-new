@@ -85,6 +85,7 @@ export async function createProductAction(
   const name = String(formData.get("name") ?? "").trim();
   const price = String(formData.get("price") ?? "").trim();
   const dimensions = String(formData.get("dimensions") ?? "").trim();
+  const height = String(formData.get("height") ?? "").trim();
   const shortDescription = String(formData.get("shortDescription") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const imageRaw = normalizeImageSrc(String(formData.get("image") ?? "").trim());
@@ -115,6 +116,7 @@ export async function createProductAction(
         wood: PRODUCT_WOOD_STORED,
         woodBadge: PRODUCT_WOOD_BADGE,
         dimensions: dimensions || "—",
+        height: height || null,
         shortDescription: shortDescription || "—",
         description: description || "—",
         finish: PRODUCT_FINISH_STORED,
@@ -144,6 +146,7 @@ export async function updateProductAction(
   const name = String(formData.get("name") ?? "").trim();
   const price = String(formData.get("price") ?? "").trim();
   const dimensions = String(formData.get("dimensions") ?? "").trim();
+  const height = String(formData.get("height") ?? "").trim();
   const shortDescription = String(formData.get("shortDescription") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const imageRaw = normalizeImageSrc(String(formData.get("image") ?? "").trim());
@@ -184,6 +187,7 @@ export async function updateProductAction(
           wood: PRODUCT_WOOD_STORED,
           woodBadge: PRODUCT_WOOD_BADGE,
           dimensions: dimensions || "—",
+          height: height || null,
           shortDescription: shortDescription || "—",
           description: description || "—",
           finish: PRODUCT_FINISH_STORED,

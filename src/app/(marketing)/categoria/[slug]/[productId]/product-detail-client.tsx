@@ -203,7 +203,7 @@ export default function ProductDetailClient({
       `Hola, me interesa cotizar "${product.name}".`,
       selectedWoodLabel ? `Madera: ${selectedWoodLabel}.` : "",
       selectedFinishLabel ? `Acabado: ${selectedFinishLabel}.` : "",
-      `Medidas: ${displayDimensions}.`,
+      `Medidas: ${displayDimensions}${product.height ? ` (Alto: ${product.height})` : ""}.`,
       referencePriceText
         ? `Precio de referencia (orientativo): ${referencePriceText}.`
         : "",
@@ -215,6 +215,7 @@ export default function ProductDetailClient({
     selectedWoodLabel,
     selectedFinishLabel,
     displayDimensions,
+    product.height,
     referencePriceText,
   ]);
   const whatsappUrl = `${SITE_WHATSAPP_URL}?text=${whatsappMessage}`;
@@ -337,14 +338,14 @@ export default function ProductDetailClient({
                 <div>
                   <OptionSelectRow
                     id="product-size-select"
-                    label={category.slug.includes("mesa") ? "Medida de la tapa (en cm)" : "Medidas (en cm)"}
+                    label="Dimensiones (largo x ancho)"
                     value={selectedSizeId ?? ""}
                     onChange={setSelectedSizeIdState}
                     options={displaySizes.map((s) => ({ id: s.id, label: s.label }))}
                   />
-                  {category.slug.includes("mesa") && (
+                  {product.height && (
                     <p className="mt-2 font-sans text-[0.72rem] text-warm-gray">
-                      * El alto estándar de la mesa es de 78 cm.
+                      * Alto del mueble: {product.height}.
                     </p>
                   )}
                 </div>
@@ -354,20 +355,20 @@ export default function ProductDetailClient({
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
                     <div className="flex flex-col gap-1">
                       <span className="font-sans text-[0.65rem] uppercase tracking-widest text-charcoal/50">
-                        {category.slug.includes("mesa") ? "Tapa de la mesa" : "Dimensiones"}
+                        Dimensiones (largo x ancho)
                       </span>
                       <span className="font-sans text-[0.95rem] text-charcoal">
-                        {product.dimensions} <span className="text-charcoal/50 text-[0.8rem]">cm</span>
+                        {product.dimensions}
                       </span>
                     </div>
 
-                    {category.slug.includes("mesa") && !product.dimensions.includes("78") && (
+                    {product.height && (
                       <>
                         <div className="hidden h-8 w-px bg-charcoal/10 sm:block" />
                         <div className="flex flex-col gap-1">
-                          <span className="font-sans text-[0.65rem] uppercase tracking-widest text-charcoal/50">Alto estándar</span>
+                          <span className="font-sans text-[0.65rem] uppercase tracking-widest text-charcoal/50">Alto</span>
                           <span className="font-sans text-[0.95rem] text-charcoal">
-                            78 <span className="text-charcoal/50 text-[0.8rem]">cm</span>
+                            {product.height}
                           </span>
                         </div>
                       </>
