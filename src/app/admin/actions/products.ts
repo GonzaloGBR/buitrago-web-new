@@ -205,7 +205,8 @@ export async function updateProductAction(
           ]
         : []),
     ]);
-  } catch {
+  } catch (err) {
+    console.error("Error updating product:", err);
     return { error: "No se pudo guardar." };
   }
   revalidatePath("/");
