@@ -42,7 +42,7 @@ const SECTIONS: Section[] = [
       {
         href: "/admin/maderas",
         title: "Maderas",
-        description: "Especies del desplegable «Madera» (pino, cedro, quina, etc.).",
+        description: "Especies del desplegable «Madera» (cedro, petiribí).",
       },
       {
         href: "/admin/acabados",

@@ -10,7 +10,6 @@ async function main() {
     data: [
       { slug: "cedro", label: "Cedro", position: 0 },
       { slug: "petiribi", label: "Petiribí", position: 1 },
-      { slug: "pino", label: "Pino", position: 2 },
     ],
   });
   await prisma.finishOption.createMany({

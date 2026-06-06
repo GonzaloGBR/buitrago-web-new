@@ -61,8 +61,6 @@ const PROCESO = [
 const MADERAS = [
   { nombre: "Cedro salteño", tono: "Cálido aromático", uso: "Muebles, guardados y piezas interiores" },
   { nombre: "Petiribí", tono: "Dorado veteado", uso: "Mesas y piezas centrales" },
-  { nombre: "Quina colorada", tono: "Rojo profundo", uso: "Escritorios y detalles de autor" },
-  { nombre: "Pino paranaense", tono: "Claro uniforme", uso: "Estructuras y complementos" },
 ];
 
 export default function ConocerMasClient({ images }: { images: ConocerMasImages }) {
