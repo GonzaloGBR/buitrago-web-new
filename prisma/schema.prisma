@@ -34,6 +34,7 @@ model Product {
   gallery          Json
   featuredAs       FeaturedProduct?
   sizes            ProductSize[]
+  orders           Order[]
 
   @@index([categorySlug])
 }
@@ -106,4 +107,41 @@ model SiteContent {
   conocerMasProcesoImage String   @default("") @db.VarChar(2048)
   conocerMasCtaImage     String   @default("") @db.VarChar(2048)
   updatedAt              DateTime @updatedAt
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+model Order {
+  id                   String      @id @default(cuid())
+  
+  customerName         String
+  whatsappNumber       String?
+  facebookChatLink     String?
+
+  productId            String?
+  product              Product?    @relation(fields: [productId], references: [id], onDelete: SetNull)
+  
+  customFurnitureName  String?
+  customDescription    String?     @db.Text
+
+  dimensions           String?     // Cuadro de solo medidas
+  finish               String?     // Brillante, Semi-brillante, Mate
+  wood                 String?     // Cedro, Petiribi
+
+  status               OrderStatus @default(PENDING)
+  totalBudget          Float
+  advancePayment       Float
+
+  orderDate            DateTime?   // Fecha en la que se solicitó el pedido
+  estimatedDeliveryDate DateTime?  // Fecha estimada de entrega
+
+  createdAt            DateTime    @default(now())
+  updatedAt            DateTime    @updatedAt
+
+  @@index([createdAt])
+  @@index([status])
 }

@@ -18,6 +18,11 @@ const NAV_GROUPS: NavGroup[] = [
     items: [{ href: "/admin", label: "Panel principal" }],
   },
   {
+    title: "Ventas",
+    description: "Gestión de clientes e ingresos",
+    items: [{ href: "/admin/pedidos", label: "Información" }],
+  },
+  {
     title: "Catálogo",
     description: "Lo que ve el visitante en el sitio",
     items: [
